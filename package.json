@@ -1,6 +1,6 @@
 {
   "name": "@automatacontrols/automata-thermostat",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Professional-grade thermostat UI widget for Node-RED Dashboard 2.0 with comprehensive HVAC controls",
   "main": "nodes/thermostat.js",
   "scripts": {
@@ -32,7 +32,10 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "author": "AutomataControls",
+  "author": {
+    "name": "AutomataControls",
+    "url": "https://github.com/AutomataControls"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/AutomataControls/AutomataThermostat/issues"
@@ -46,5 +49,14 @@
     "mocha": "^10.2.0",
     "node-red": "^3.1.0",
     "node-red-node-test-helper": "^0.3.3"
-  }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "files": [
+    "nodes/",
+    "README.md",
+    "LICENSE"
+  ]
 }
