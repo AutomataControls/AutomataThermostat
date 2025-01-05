@@ -2,7 +2,7 @@
 
 Professional-grade HVAC control interface for Node-RED Dashboard 2.0, featuring comprehensive building automation capabilities.
 
-![Automata Thermostat](nodes/icons/thermostat.png)
+![Automata Thermostat Screenshot](https://raw.githubusercontent.com/AutomataControls/AutomataThermostat/main/nodes/icons/thermostat.png)
 
 ## Features
 
