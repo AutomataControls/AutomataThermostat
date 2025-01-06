@@ -14,7 +14,7 @@ module.exports = function (RED) {
         // Store the full UI template HTML in a separate file
         const fs = require('fs');
         const path = require('path');
-        const templatePath = path.join(__dirname, 'thermostat.html');
+        const templatePath = path.join(__dirname, 'templates', 'thermostat-ui.html');
         const template = fs.readFileSync(templatePath, 'utf8');
 
         const done = ui.addWidget({
