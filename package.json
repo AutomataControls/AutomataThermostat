@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/AutomataControls/AutomataThermostat#readme",
   "dependencies": {
-    "node-red-dashboard": "^3.5.0"
+    "node-red-dashboard": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
