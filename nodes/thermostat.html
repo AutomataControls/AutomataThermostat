@@ -19,6 +19,10 @@
         </select>
     </div>
     <div class="form-row">
+        <label for="node-input-height"><i class="fa fa-arrows-v"></i> Height</label>
+        <input type="number" id="node-input-height" min="1" max="45">
+    </div>
+    <div class="form-row">
         <label for="node-input-units"><i class="fa fa-thermometer-half"></i> Units</label>
         <select id="node-input-units">
             <option value="F">Fahrenheit</option>
@@ -35,8 +39,8 @@
             name: { value: "" },
             group: { type: "ui_group", required: true },
             order: { value: 0 },
-            width: { value: 12 },
-            height: { value: 8 },
+            width: { value: 30 },
+            height: { value: 45 },
             theme: { value: "dark" },
             units: { value: "F" }
         },
