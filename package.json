@@ -1,6 +1,6 @@
 {
   "name": "@automatacontrols/automata-thermostat",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Professional-grade thermostat UI widget for Node-RED Dashboard 2.0 with comprehensive HVAC controls",
   "main": "nodes/thermostat.js",
   "scripts": {
@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/AutomataControls/AutomataThermostat#readme",
   "dependencies": {
-    "@node-red/dashboard": "^3.0.0"
+    "node-red-dashboard": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
