@@ -1,0 +1,3723 @@
+[
+    {
+        "id": "cefbd229b0ef15d9",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 3",
+        "func": "// Retrieve DischargeAir from global context\nvar dischargeAir = global.get('supply');\n\n// Check if DischargeAir is within the normal range\nif (dischargeAir >= 40 && dischargeAir <= 80) {\n    // Set msg.payload to \"MUA1AllClear\"\n    msg.payload = \"MUA1AllClear\";\n    // Update node status\n    node.status({ fill: \"green\", shape: \"dot\", text: \"DischargeAir: \" + dischargeAir });\n} else {\n    // Check if DischargeAir is below normal range\n    if (dischargeAir < 40) {\n        // Set msg.payload to \"MUA1 ALARM!LowDischargeAir\"\n        msg.payload = \"MUA1 ALARM!LowDischargeAir\";\n        // Update node status\n        node.status({ fill: \"yellow\", shape: \"dot\", text: \"Low DischargeAir: \" + dischargeAir });\n    }\n    // Check if DischargeAir is above normal range\n    if (dischargeAir > 90) {\n        // Set msg.payload to \"MUA1 ALARM!HighDischargeAir\"\n        msg.payload = \"MUA1 ALARM!HighDischargeAir\";\n        // Update node status\n        node.status({ fill: \"red\", shape: \"dot\", text: \"High DischargeAir: \" + dischargeAir });\n    }\n}\n\n// Save alarm status to global context\nglobal.set('alarmStatus', msg.payload);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 4180,
+        "y": 2040,
+        "wires": [
+            [
+                "3f8fa41996fb1c79",
+                "2c6374aab63ee89d"
+            ]
+        ]
+    },
+    {
+        "id": "3f8fa41996fb1c79",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 69",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 4220,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "2c6374aab63ee89d",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "alarm",
+                "fromt": "str",
+                "to": "0",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "AllClear",
+                "fromt": "str",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4420,
+        "y": 1980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0a8eea3be7a36f07",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 87",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 4740,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "9f6976ecc3259e0c",
+        "type": "BAS 0-10V out",
+        "z": "03439e94ed033c2f",
+        "name": "Heating Actuator",
+        "stack": "0",
+        "channel": "1",
+        "payload": "payload",
+        "payloadType": "msg",
+        "x": 3000,
+        "y": 1500,
+        "wires": [
+            [
+                "664fd9adbf85b7af",
+                "8cbd2e8f42e5b685"
+            ]
+        ]
+    },
+    {
+        "id": "33ab08d029e01826",
+        "type": "BAS triac",
+        "z": "03439e94ed033c2f",
+        "name": "Fan Enable",
+        "stack": "0",
+        "channel": "1",
+        "payload": "payload",
+        "payloadType": "msg",
+        "x": 3050,
+        "y": 1060,
+        "wires": [
+            [
+                "a5749a4e8a86c354"
+            ]
+        ]
+    },
+    {
+        "id": "190cb3195112c12b",
+        "type": "BAS 0-10V out",
+        "z": "03439e94ed033c2f",
+        "name": "CoolingActuator",
+        "stack": "0",
+        "channel": "3",
+        "payload": "payload",
+        "payloadType": "msg",
+        "x": 3140,
+        "y": 1340,
+        "wires": [
+            [
+                "2f9129725639aa43",
+                "078ce11f45dad625"
+            ]
+        ]
+    },
+    {
+        "id": "58b2d8dad1375c74",
+        "type": "BAS triac",
+        "z": "03439e94ed033c2f",
+        "name": "OutdoorAirDamper",
+        "stack": "0",
+        "channel": "2",
+        "payload": "payload",
+        "payloadType": "msg",
+        "x": 2990,
+        "y": 1200,
+        "wires": [
+            [
+                "9d3be9800f1208c2",
+                "72bf5af79d3e7bbb"
+            ]
+        ]
+    },
+    {
+        "id": "5a49526254ec633c",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 59",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 840,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "399394da3ae96cf1",
+        "type": "exec",
+        "z": "03439e94ed033c2f",
+        "command": "megabas 0 owbtrd 1",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 415,
+        "y": 1280,
+        "wires": [
+            [
+                "1feddf9de5d3e61e",
+                "b2eaf3b64480d6f3"
+            ],
+            [],
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "1feddf9de5d3e61e",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 68",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 620,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "f2f91ec37ebf8e5c",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "14400",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 4050,
+        "y": 2040,
+        "wires": [
+            [
+                "cefbd229b0ef15d9"
+            ]
+        ]
+    },
+    {
+        "id": "8efc1984ef7af74d",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 4070,
+        "y": 1880,
+        "wires": [
+            [
+                "6885a94881eaa721"
+            ]
+        ]
+    },
+    {
+        "id": "6885a94881eaa721",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 46",
+        "func": "// Retrieve SupplyAir temperature and FreezeStat\nvar SupplyAir = global.get('supply');\nvar FreezeStat = global.get('FreezeTrip');\n\n// Initialize output variable for system status\nvar systemStatus = {\n    payload: {\n        message: \"\",\n        FreezeStat: FreezeStat\n    }\n};\n\n// Define temperature thresholds\nvar tempMin = 40;  // Minimum safe temperature\nvar tempMax = 105; // Maximum safe temperature\n\n// Check if temperature is within safe range\nvar isInAlarm = (SupplyAir < tempMin || SupplyAir > tempMax);\n\n// Update status and message based on conditions\nif (isInAlarm) {\n    systemStatus.payload.message = \"HeritageHuntingtonMua1:Alarm: Temperature out of safe range. Temp: \" +\n        SupplyAir.toFixed(1) + \"°F. FreezeStat: \" + FreezeStat;\n    node.status({\n        fill: \"red\",\n        shape: \"ring\",\n        text: \"Temperature abnormal: \" + SupplyAir.toFixed(1) + \"°F\"\n    });\n} else {\n    systemStatus.payload.message = \"HeritageHuntingtonMua1:All OK. System is functioning normally. Temp: \" +\n        SupplyAir.toFixed(1) + \"°F. FreezeStat: \" + FreezeStat;\n    node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: \"Temperature normal: \" + SupplyAir.toFixed(1) + \"°F\"\n    });\n}\n\n// Output the system status, including FreezeStat\nreturn [systemStatus];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 4230,
+        "y": 1880,
+        "wires": [
+            [
+                "50e3b4401e4e80c1"
+            ]
+        ]
+    },
+    {
+        "id": "50e3b4401e4e80c1",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 47",
+        "func": "// Define the time interval in seconds for limiting \"No alarms detected\" messages\nvar noAlarmMessageInterval = 30;  // 5 minutes in seconds\n\n// Get the current time in seconds\nvar currentTime = Math.floor(Date.now() / 1000);\n\n// Retrieve the last time a \"No alarms detected\" message was sent from the global context\nvar lastNoAlarmTime = global.get('LastNoAlarmTime') || 0;\n\n// Debugging logs\nnode.log(`Current Time: ${currentTime}`);\nnode.log(`Last No Alarm Time: ${lastNoAlarmTime}`);\n\n// Check if the payload indicates \"No alarms detected\"\nif (typeof msg.payload === 'string' && msg.payload.includes(\"All OK. System is functioning normally.\")) {\n    // Check if enough time has passed since the last \"No alarms detected\" message was sent\n    if (currentTime - lastNoAlarmTime >= noAlarmMessageInterval) {\n        // Update the last time a \"No alarms detected\" message was sent in the global context\n        global.set('LastNoAlarmTime', currentTime);\n        node.status({ fill: \"green\", shape: \"dot\", text: \"No alarm message sent\" });\n        return msg;  // Allow the message to pass through\n    } else {\n        // Block the message if the interval hasn't passed\n        node.status({ fill: \"yellow\", shape: \"ring\", text: \"No alarm message blocked: Too frequent\" });\n        return null;  // Block the message\n    }\n} else {\n    // Allow any other alarm conditions or messages to pass through\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 4410,
+        "y": 1880,
+        "wires": [
+            [
+                "8fb6f4eea2a0b06c"
+            ]
+        ]
+    },
+    {
+        "id": "8fb6f4eea2a0b06c",
+        "type": "mqtt out",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "topic": "SystemStatus",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d416c8e74d906acf",
+        "x": 4680,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "8021e11d61633a5c",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Save to Global",
+        "func": "// Store thermostat data globally\nconst thermostatData = {\n    setpoint: msg.payload.setpoint || global.get(\"thermostatData.setpoint\") || 72,\n    mode: msg.payload.mode || global.get(\"thermostatData.mode\") || 'off',\n    indoorTemp: msg.payload.supply || global.get(\"thermostatData.indoorTemp\") || 72,\n    outdoorTemp: msg.payload.outdoorAir || global.get(\"thermostatData.outdoorTemp\") || 68,\n    humidity: msg.payload.humidity || global.get(\"thermostatData.humidity\") || 40,\n    oaActuator: msg.payload.oaActuator || global.get(\"thermostatData.oaActuator\"),\n    vfd: msg.payload.vfd || global.get(\"thermostatData.vfd\"),\n    hwActuator: msg.payload.hwActuator || global.get(\"thermostatData.hwActuator\"),\n    cwActuator: msg.payload.cwActuator || global.get(\"thermostatData.cwActuator\"),\n    pumpPressure: msg.payload.pumpPressure || global.get(\"thermostatData.pumpPressure\"),\n    buildingPressure: msg.payload.buildingPressure || global.get(\"thermostatData.buildingPressure\")\n};\n\n// Save updated thermostat data to global context\nglobal.set(\"thermostatData\", thermostatData);\n\n// Pass the data along for any additional nodes that follow\nmsg.payload = thermostatData;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2040,
+        "y": 1080,
+        "wires": [
+            [
+                "b35024db621b226f"
+            ]
+        ]
+    },
+    {
+        "id": "d6a909e17ebf3ded",
+        "type": "BAS DC in",
+        "z": "03439e94ed033c2f",
+        "name": "FanStatus",
+        "stack": "0",
+        "channel": "3",
+        "payload": "payload",
+        "payloadType": "msg",
+        "x": 450,
+        "y": 1680,
+        "wires": [
+            [
+                "508177d7c1cd9741"
+            ]
+        ]
+    },
+    {
+        "id": "f273bca616f2fc0c",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 4050,
+        "y": 2080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0a92f917b4e8a8d",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "a05ca9fcce16b771"
+        ],
+        "x": 3095,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "3faab2bf34c9f66a",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.3",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 250,
+        "y": 1280,
+        "wires": [
+            [
+                "399394da3ae96cf1"
+            ]
+        ]
+    },
+    {
+        "id": "d96127fbe75da5be",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.4",
+        "topic": "",
+        "payload": "64",
+        "payloadType": "num",
+        "x": 430,
+        "y": 1320,
+        "wires": [
+            [
+                "2b049296622ee5bd"
+            ]
+        ]
+    },
+    {
+        "id": "0133733ed35f18bc",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "mixedAir",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "mixedAir",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 1300,
+        "wires": [
+            [
+                "35a6b3e87fa74143",
+                "79a7fb00d84ed26b"
+            ]
+        ]
+    },
+    {
+        "id": "2ef171ecd72f4349",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "SAT",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "35a6b3e87fa74143",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "MAT",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "37f6a9b0379e0c4a",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "SAT",
+        "mode": "link",
+        "links": [
+            "d7f4177ac1b4638e"
+        ],
+        "x": 1125,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "79a7fb00d84ed26b",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "MAT",
+        "mode": "link",
+        "links": [
+            "5723884f08c11165"
+        ],
+        "x": 1125,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "15012399cc6ace9a",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "HeatingLogic",
+        "func": "// Retrieve FreezeStat and HOA mode from global context\nconst freezeStat = global.get(\"FreezeStat\") || true;\nconst HOA_Mode = msg.topic === \"HOA\" ? msg.payload : global.get(\"HOA_Mode\") || \"Off\";\n\n// Define voltage range for modulating output\nconst minV = 8.5;    // Minimum voltage output\nconst maxV = 0.0;   // Maximum voltage output\nconst unoccupiedV = 4;  // Voltage for unoccupied mode (30% open)\n\n// Get setpoint and supply temperature from global context \nconst setpoint = global.get(\"thermostatData.setpoint\") || 75;  // Default heating setpoint 75°F\nconst supply = parseFloat(global.get(\"supply\")) || 74;      // Default supply temp 65°F\n\n// Retrieve occupied status from global context\nconst occupied = global.get(\"occupied\") || false;\n\n// Create message objects for outputs\nlet msg1 = { payload: minV };  // Modulating output\nlet msg2 = { payload: 0 };  // Triac relay output\nlet msg3 = { payload: 0 };  // Alarm output\n\n// Save HOA Mode to global if provided\nif (msg.topic === \"HOA\") {\n    global.set(\"HOA_Mode\", HOA_Mode);\n}\n\n// Handle control mode switching\nlet controlMode;\nif (msg.topic === \"controlMode_Heating\") {\n    controlMode = msg.payload;\n    global.set(\"controlMode\", msg.payload);  // Save to global context\n} else {\n    controlMode = global.get(\"controlMode\") || \"mod\";  // Default to modulating mode\n}\n\n// Retrieve Outdoor Temperature\nconst outdoorTemp = msg.payload && msg.payload.outdoorTemp !== undefined ? msg.payload.outdoorTemp : global.get(\"outdoorTemp\") || 30;\n\n// PID Constants for Modulating control\nconst kp = 0.95;    // Proportional gain\nconst ki = 0.71;   // Integral gain\nconst kd = 0.001;   // Derivative gain\n\n// Initialize variables\nlet error = 0;\nlet lastError = global.get(\"lastError\") || 0;\nlet integral = global.get(\"integral\") || 0;\nlet derivative = 0;\nlet modulatingOutput = minV;\nlet alarmOutput = 0;\n\n// Check for FreezeStat false condition - override with 100% heating\nif (freezeStat === false) {\n    node.status({\n        fill: \"red\",\n        shape: \"dot\",\n        text: `FREEZE PROTECTION ACTIVE - Heating 100% | Supply: ${supply}°F`\n    });\n    msg1.payload = maxV;   // maxV = 100% open for heating\n    msg2.payload = 1;   // Relay ON\n    msg3.payload = 1;   // Alarm ON\n    return [msg1, msg2, msg3];\n}\n\n// If occupied is false, set actuator to 30% open\nif (!occupied) {\n    node.status({\n        fill: \"orange\",\n        shape: \"dot\",\n        text: `Unoccupied | Actuator 30% Open | Supply: ${supply}°F`\n    });\n    msg1.payload = unoccupiedV;   // 30% open (3V)\n    return [msg1, msg2, msg3];\n}\n\n// Outdoor Temperature Lockout\nif (outdoorTemp >= 75) {\n    msg3.payload = 1;\n    msg1.payload = minV;  // minV = closed for lockout\n    node.status({\n        fill: \"red\",\n        shape: \"dot\",\n        text: `Heating Lockout | Outdoor: ${outdoorTemp}°F > 75°F | Supply: ${supply}°F SP: ${setpoint}°F`\n    });\n    return [msg1, msg2, msg3];\n}\n\n// Handle HOA Mode\nswitch (HOA_Mode) {\n    case \"Auto\":\n        // MODULATING MODE (PID Control)\n        if (controlMode === \"mod\") {\n            // PID Control Calculation for direct acting\n            error = setpoint - supply;  // Positive error means we need heat\n\n            // Limit integral windup\n            if (Math.abs(error) < 10) {\n                integral += error;\n            }\n\n            derivative = error - lastError;\n\n            // Calculate PID output\n            modulatingOutput = (kp * error) + (ki * integral) + (kd * derivative);\n\n            // Scale output for direct acting (minV = closed, maxV = open)\n            if (error > 0) {  // Need heating\n                modulatingOutput = Math.min(Math.max(modulatingOutput, minV), maxV);\n            } else {  // Don't need heating\n                modulatingOutput = minV;  // Fully closed\n            }\n\n            // Anti-windup - reset integral if we're at output limits\n            if (modulatingOutput === minV || modulatingOutput === maxV) {\n                integral = 0;\n            }\n\n            // Save PID variables\n            global.set(\"lastError\", error);\n            global.set(\"integral\", integral);\n\n            node.status({\n                fill: \"blue\",\n                shape: \"dot\",\n                text: `Mod Mode | Output: ${modulatingOutput.toFixed(2)}V | Supply: ${supply}°F SP: ${setpoint}°F | Error: ${error.toFixed(2)}°F`\n            });\n            msg1.payload = modulatingOutput;\n            return [msg1, msg2, msg3];\n\n            // TRIAC MODE\n        } else if (controlMode === \"triac\") {\n            // Enable triac if heating is needed\n            msg2.payload = supply < setpoint ? 1 : 0;\n\n            node.status({\n                fill: \"yellow\",\n                shape: \"dot\",\n                text: `Triac Mode | ${msg2.payload ? \"ON\" : \"OFF\"} | Supply: ${supply}°F SP: ${setpoint}°F`\n            });\n            return [msg1, msg2, msg3];\n        }\n        break;\n\n    case \"Off\":\n        msg1.payload = minV;  // minV = closed when off\n        node.status({\n            fill: \"red\",\n            shape: \"dot\",\n            text: `Heating Off (HOA Mode) | Supply: ${supply}°F SP: ${setpoint}°F`\n        });\n        return [msg1, msg2, msg3];\n\n    case \"Hand\":\n        if (msg.topic === \"ManualControl\") {\n            msg1.payload = msg.payload;\n            node.status({\n                fill: \"green\",\n                shape: \"dot\",\n                text: `Manual Control: ${msg.payload}V | Supply: ${supply}°F SP: ${setpoint}°F`\n            });\n            return [msg1, msg2, msg3];\n        } else {\n            node.status({\n                fill: \"grey\",\n                shape: \"dot\",\n                text: `Waiting for Manual Control | Supply: ${supply}°F SP: ${setpoint}°F`\n            });\n            return [msg1, msg2, msg3];\n        }\n\n    default:\n        msg1.payload = minV;  // minV = closed for invalid mode\n        node.status({\n            fill: \"red\",\n            shape: \"dot\",\n            text: `Invalid HOA Mode | Supply: ${supply}°F SP: ${setpoint}°F`\n        });\n        return [msg1, msg2, msg3];\n}\n\nreturn [msg1, msg2, msg3];",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2770,
+        "y": 1520,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "fb92741ee6c3179b",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "func": "// Retrieve FreezeStat from global context - default to true (normal operation)\nlet freezeStat = global.get(\"FreezeStat\");\nif (freezeStat === undefined) freezeStat = true;\n\n// Get air temperatures from global context\nconst outdoorAir = global.get(\"outdoorAir\") || 72;\nconst mixedAir = global.get(\"mixedAir\") || 72;\nconst supply = global.get(\"supply\") || 72;\n\n// Retrieve Outdoor Temperature from msg.payload or set a default\nconst outdoorTemp = msg.payload && msg.payload.outdoorTemp !== undefined ? msg.payload.outdoorTemp : global.get(\"outdoorTemp\") || 65;\n\n// Supply temperature control logic comes first\nif (supply > 77 && outdoorTemp > 0 && outdoorTemp < 65 && freezeStat) {\n    msg.payload = 1; // Open damper\n    node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: `OAActuator ON (Supply Cooling) | Supply: ${supply}°F OAT: ${outdoorTemp}°F`\n    });\n    return msg;\n} else if (supply <= 74) {\n    msg.payload = 0;\n    node.status({\n        fill: \"yellow\",\n        shape: \"dot\",\n        text: `OAActuator OFF (Target Reached) | Supply: ${supply}°F`\n    });\n    return msg;\n}\n\n// Safety checks\nif (!freezeStat) {\n    msg.payload = 0;\n    node.status({ fill: \"red\", shape: \"dot\", text: \"OAActuator disabled (FreezeStat)\" });\n    return msg;\n}\n\nif (mixedAir < 40) {\n    msg.payload = 0;\n    node.status({ fill: \"red\", shape: \"dot\", text: `OAActuator Disabled | MA: ${mixedAir}°F (Low Temp)` });\n    return msg;\n}\n\n// Standard temperature range check only applies when not in supply temp control mode\nif (supply <= 78 && (outdoorTemp < 40 || outdoorTemp > 85)) {\n    msg.payload = 0;\n    node.status({ fill: \"red\", shape: \"dot\", text: `OAActuator Disabled | Outdoor Temp: ${outdoorTemp}°F (40-85°F)` });\n    return msg;\n}\n\n// If all checks pass and no special conditions met, enable output\nmsg.payload = 1;\nnode.status({ fill: \"green\", shape: \"dot\", text: `OAActuator ON | OA: ${outdoorAir}°F MA: ${mixedAir}°F` });\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2760,
+        "y": 1220,
+        "wires": [
+            [
+                "30307bd4febc054b",
+                "58b2d8dad1375c74"
+            ]
+        ]
+    },
+    {
+        "id": "58ff7f571ac91d64",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "FanEnableLogic",
+        "func": "// Retrieve FreezeStat, Occupancy and HOA mode from global context\nlet freezeStat = global.get(\"FreezeStat\") || false;\nlet HOA_Mode = msg.topic === \"HOA\" ? msg.payload : global.get(\"HOA_Mode\") || \"Off\";\nlet mixedAir = global.get(\"mixedAir\") || 72;  // Get mixed air temperature\nlet occupied = global.get(\"occupied\") || false;  // Get occupancy status\n\n// Default VFD speed reference\nlet DEFAULT_VFD_SPEED = 3;\n\n// Save HOA Mode to global if provided\nif (msg.topic === \"HOA\") {\n    global.set(\"HOA_Mode\", HOA_Mode);\n}\n\n// Handle control mode switching\nlet controlMode;\nif (msg.topic === \"controlMode_Fan\") {\n    controlMode = msg.payload;\n    global.set(\"controlMode\", msg.payload);  // Save to global context\n} else {\n    controlMode = global.get(\"controlMode\") || \"mod\";  // Default to modulating mode\n}\n\n// Retrieve thermostatData with default values for setpoint and indoorTemp if not set\nlet thermostatData = global.get(\"thermostatData\") || { setpoint: 72, indoorTemp: 72 };\n\n// Retrieve Outdoor Temperature from msg.payload or set a default\nlet outdoorTemp = msg.payload && msg.payload.outdoorTemp !== undefined ? msg.payload.outdoorTemp : global.get(\"outdoorTemp\") || 65;\n\nlet modulatingOutput = DEFAULT_VFD_SPEED;  // Default static speed\nlet runCommand = 1;  // Default run command\nlet alarmOutput = 0;  // Default to no alarm\n\n// Helper function to create status message with temperatures\nfunction getTemperatureStatus() {\n    return `Indoor: ${thermostatData.indoorTemp}°F | MA: ${mixedAir}°F | Outdoor: ${outdoorTemp}°F | ${occupied ? \"Occupied\" : \"Unoccupied\"}`;\n}\n\n// Create message objects for outputs\nlet msg1 = { payload: 0 };  // Run command\nlet msg2 = { payload: 0 };  // Speed reference\nlet msg3 = { payload: 0 };  // Alarm\n\n// Check Occupancy\nif (!occupied && HOA_Mode !== \"Hand\") {  // Allow manual operation regardless of occupancy\n    node.status({\n        fill: \"yellow\",\n        shape: \"dot\",\n        text: `Fan disabled (Unoccupied) | ${getTemperatureStatus()}`\n    });\n    return [msg1, msg2, msg3];\n}\n\n// Check Mixed Air Temperature\nif (mixedAir < 40) {\n    alarmOutput = 1;\n    node.status({ fill: \"red\", shape: \"dot\", text: `Fan disabled (Low MA Temp: ${mixedAir}°F) | ${getTemperatureStatus()}` });\n    return [msg1, msg2, msg3];\n}\n\n// Check if heating is allowed (FreezeStat check only)\nif (freezeStat) {\n    alarmOutput = 1;\n    node.status({ fill: \"red\", shape: \"dot\", text: `Heating disabled (FreezeStat) | ${getTemperatureStatus()}` });\n    return [msg1, msg2, msg3];\n}\n\n// Handle HOA Mode\nswitch (HOA_Mode) {\n    case \"Auto\":\n        // TRIAC MODE (Relay Control)\n        if (controlMode === \"triac\") {\n            runCommand = msg.payload === 1 ? 1 : 0;\n\n            let fanState = runCommand === 1 ? \"Fan Running\" : \"Fan Off\";\n            node.status({\n                fill: runCommand === 1 ? \"green\" : \"yellow\",\n                shape: \"dot\",\n                text: `Mode: Triac | ${fanState} | ${getTemperatureStatus()}`\n            });\n\n            msg1.payload = runCommand;\n            msg2.payload = 0;\n            msg3.payload = alarmOutput;\n            return [msg1, msg2, msg3];\n        }\n\n        // MODULATING MODE (Static Speed Reference)\n        if (controlMode === \"mod\") {\n            runCommand = 1;\n            modulatingOutput = DEFAULT_VFD_SPEED;\n\n            let fanState = \"Fan Running\";\n            let outputPercent = Math.round((modulatingOutput / 10) * 100);\n\n            node.status({\n                fill: \"green\",\n                shape: \"dot\",\n                text: `Mode: VFD ${outputPercent}% | ${fanState} | ${getTemperatureStatus()}`\n            });\n\n            msg1.payload = runCommand;\n            msg2.payload = modulatingOutput;\n            msg3.payload = alarmOutput;\n            return [msg1, msg2, msg3];\n        }\n        break;\n\n    case \"Off\":\n        node.status({\n            fill: \"red\",\n            shape: \"dot\",\n            text: `System Off (HOA Mode) | ${getTemperatureStatus()}`\n        });\n        msg1.payload = 0;\n        msg2.payload = 0;\n        msg3.payload = alarmOutput;\n        return [msg1, msg2, msg3];\n\n    case \"Hand\":\n        if (msg.topic === \"ManualControl\") {\n            runCommand = 1;\n            let manualValue = msg.payload;\n            let outputPercent = Math.round((manualValue / 10) * 100);\n            node.status({\n                fill: \"blue\",\n                shape: \"dot\",\n                text: `Manual Control ${outputPercent}% | ${getTemperatureStatus()}`\n            });\n            msg1.payload = runCommand;\n            msg2.payload = manualValue;\n            msg3.payload = alarmOutput;\n            return [msg1, msg2, msg3];\n        } else {\n            node.status({\n                fill: \"grey\",\n                shape: \"dot\",\n                text: `Manual Mode - Awaiting Input | ${getTemperatureStatus()}`\n            });\n            msg1.payload = 0;\n            msg2.payload = 0;\n            msg3.payload = alarmOutput;\n            return [msg1, msg2, msg3];\n        }\n\n    default:\n        node.status({\n            fill: \"red\",\n            shape: \"dot\",\n            text: `Invalid HOA Mode | ${getTemperatureStatus()}`\n        });\n        msg1.payload = 0;\n        msg2.payload = 0;\n        msg3.payload = alarmOutput;\n        return [msg1, msg2, msg3];\n}\n\nmsg1.payload = 0;\nmsg2.payload = 0;\nmsg3.payload = alarmOutput;\nreturn [msg1, msg2, msg3];",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2770,
+        "y": 1080,
+        "wires": [
+            [
+                "33ab08d029e01826"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "73217d22eb8a27bc",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "CoolingLogic- Modulating & DX",
+        "func": "// Retrieve FreezeStat, HiLimit, and HOA mode from global context\nconst freezeStat = global.get(\"FreezeStat\") || false;\nconst hiLimit = global.get(\"HiLimit\") || false;\nconst HOA_Mode = msg.topic === \"HOA\" ? msg.payload : global.get(\"HOA_Mode\") || \"Off\";\n\n// Define voltage range for modulating output\nconst minV = 4.80;    // Minimum voltage output\nconst maxV = 8.0;   // Maximum voltage output\n\n// Get setpoint and supply temperature from global context\nconst setpoint = global.get(\"thermostatData.setpoint\") || 62;  // Default cooling setpoint 62°F\nconst supply = parseFloat(global.get(\"supply\")) || 74;      // Default supply temp 75°F\n\n// Retrieve occupied status from global context\nconst occupied = global.get(\"occupied\") || false;\n\n// Create message objects for outputs\nlet msg1 = { payload: minV };  // Modulating output\nlet msg2 = { payload: 0 };  // Stage 1 DX\nlet msg3 = { payload: 0 };  // Stage 2 DX\n\n// Calculate cooling demand - positive error means cooling needed\nconst coolingDemand = supply - setpoint;  // positive value means cooling needed\n\n// Save HOA Mode to global if provided\nif (msg.topic === \"HOA\") {\n    global.set(\"HOA_Mode\", HOA_Mode);\n}\n\n// Handle control mode switching\nlet controlMode;\nif (msg.topic === \"controlMode_Cooling\") {\n    controlMode = msg.payload;\n    global.set(\"controlModeCooling\", msg.payload);  // Save to global context\n} else {\n    controlMode = global.get(\"controlModeCooling\") || \"mod\";  // Default to modulating mode\n}\n\n// PID Constants for Modulating control\nconst kp =  0.98;    // Increased proportional gain\nconst ki = 0.02;    // Adjusted integral gain\nconst kd = 0.001;   // Derivative gain\n\n// Initialize variables for PID, DX stages, and short cycle timer\nlet error = 0;\nlet lastError = global.get(\"lastError\") || 0;\nlet integral = global.get(\"integral\") || 0;\nlet derivative = 0;\nlet modulatingOutput = minV;\nconst dxTempThreshold = setpoint + 3;  // Activate DX when 3°F above setpoint\nconst shortCycleDelay = 300000;        // Short-cycle delay for Stage 1 (5 minutes)\n\n// If occupied is false, close actuator\nif (!occupied) {\n    node.status({\n        fill: \"orange\",\n        shape: \"dot\",\n        text: `Unoccupied | Actuator Closed | Supply: ${supply}°F`\n    });\n    msg1.payload = minV;\n    return [msg1, msg2, msg3];\n}\n\n// Check if cooling is allowed based on FreezeStat or HiLimit\nif (freezeStat || hiLimit) {\n    node.status({\n        fill: \"red\",\n        shape: \"dot\",\n        text: `Cooling disabled (FreezeStat/HiLimit) | Supply: ${supply}°F SP: ${setpoint}°F`\n    });\n    msg1.payload = minV;\n    return [msg1, msg2, msg3];\n}\n\n// Handle HOA Mode\nswitch (HOA_Mode) {\n    case \"Auto\":\n        // MODULATING MODE (PID Control)\n        if (controlMode === \"mod\") {\n            // Reset DX stages when switching to modulating mode\n            global.set(\"Stage1Enabled\", false);\n            global.set(\"Stage2Enabled\", false);\n\n            // For cooling, positive error (supply > setpoint) should give more cooling (higher voltage)\n            error = supply - setpoint;\n\n            // Limit integral windup\n            if (Math.abs(error) < 10) {  // Only integrate when close to setpoint\n                integral += error;\n            }\n\n            derivative = error - lastError;\n\n            // Calculate output - positive error gives more cooling (higher voltage)\n            modulatingOutput = (kp * error) + (ki * integral) + (kd * derivative);\n\n            // Scale output between minV and maxV\n            modulatingOutput = Math.min(Math.max(modulatingOutput, minV), maxV);\n\n            // Anti-windup - reset integral if we're at output limits\n            if (modulatingOutput === minV || modulatingOutput === maxV) {\n                integral = 0;\n            }\n\n            global.set(\"lastError\", error);\n            global.set(\"integral\", integral);\n\n            node.status({\n                fill: \"blue\",\n                shape: \"dot\",\n                text: `Mod Mode | Output: ${modulatingOutput.toFixed(2)}V | Supply: ${supply}°F SP: ${setpoint}°F | Error: ${error.toFixed(2)}°F`\n            });\n\n            msg1.payload = modulatingOutput;\n            return [msg1, msg2, msg3];\n\n        } else if (controlMode === \"dx\") {\n            // Reset modulating output when switching to DX mode\n            global.set(\"lastError\", 0);\n            global.set(\"integral\", 0);\n\n            // DX Stage Logic\n            if (supply > dxTempThreshold) {\n                // Stage 1 Logic\n                if (!global.get(\"Stage1Enabled\")) {\n                    global.set(\"Stage1Enabled\", true);\n                    msg2.payload = 1;\n                } else {\n                    msg2.payload = 1;\n                }\n\n                // Stage 2 Logic (activate when 2°F above Stage 1 threshold)\n                if (supply > dxTempThreshold + 2 && global.get(\"Stage1Enabled\")) {\n                    global.set(\"Stage2Enabled\", true);\n                    msg3.payload = 1;\n                }\n            } else {\n                // Temperature below threshold - disable stages\n                if (global.get(\"Stage2Enabled\")) {\n                    msg3.payload = 0;\n                    global.set(\"Stage2Enabled\", false);\n                }\n\n                if (global.get(\"Stage1Enabled\")) {\n                    msg2.payload = 0;\n                    global.set(\"Stage1Enabled\", false);\n                }\n            }\n\n            const stage1Status = global.get(\"Stage1Enabled\") ? \"ON\" : \"OFF\";\n            const stage2Status = global.get(\"Stage2Enabled\") ? \"ON\" : \"OFF\";\n\n            node.status({\n                fill: \"yellow\",\n                shape: \"dot\",\n                text: `DX Mode | Stage1: ${stage1Status}, Stage2: ${stage2Status} | Supply: ${supply}°F SP: ${setpoint}°F`\n            });\n            return [msg1, msg2, msg3];\n        }\n        break;\n\n    case \"Off\":\n        node.status({\n            fill: \"red\",\n            shape: \"dot\",\n            text: `Cooling Off (HOA Mode) | Supply: ${supply}°F SP: ${setpoint}°F`\n        });\n        msg1.payload = minV;\n        return [msg1, msg2, msg3];\n\n    case \"Hand\":\n        if (msg.topic === \"ManualControl\") {\n            msg1.payload = msg.payload;\n            node.status({\n                fill: \"green\",\n                shape: \"dot\",\n                text: `Manual Control: ${msg.payload}V | Supply: ${supply}°F SP: ${setpoint}°F`\n            });\n            return [msg1, msg2, msg3];\n        } else {\n            node.status({\n                fill: \"grey\",\n                shape: \"dot\",\n                text: `Waiting for Manual Control | Supply: ${supply}°F SP: ${setpoint}°F`\n            });\n            return [msg1, msg2, msg3];\n        }\n\n    default:\n        node.status({\n            fill: \"red\",\n            shape: \"dot\",\n            text: `Invalid HOA Mode | Supply: ${supply}°F SP: ${setpoint}°F`\n        });\n        msg1.payload = minV;\n        return [msg1, msg2, msg3];\n}\n\nreturn [msg1, msg2, msg3];",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2830,
+        "y": 1360,
+        "wires": [
+            [
+                "190cb3195112c12b"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5604241ed549185f",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 2",
+        "links": [
+            "7e1b3f290664d755"
+        ],
+        "x": 2685,
+        "y": 1300,
+        "wires": [
+            [
+                "73217d22eb8a27bc"
+            ]
+        ]
+    },
+    {
+        "id": "bd91d979d7c971c3",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 3",
+        "links": [
+            "7e1b3f290664d755"
+        ],
+        "x": 2685,
+        "y": 1460,
+        "wires": [
+            [
+                "15012399cc6ace9a"
+            ]
+        ]
+    },
+    {
+        "id": "1fe36d82e172d28a",
+        "type": "ui_template",
+        "z": "03439e94ed033c2f",
+        "group": "c78453392eca2fcb",
+        "name": "Automata Thermostat V2",
+        "order": 3,
+        "width": 16,
+        "height": 65,
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\" />\n  <title>Automata Thermostat</title>\n  <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n  <style>\n    .thermostat-container {\n      width: 100%;\n      min-width: 300px;\n      max-width: 600px;\n      padding: 20px;\n      background: #15171B;\n      display: flex;\n      flex-direction: column;\n      color: #ffffff;\n      font-family: sans-serif;\n      font-size: 14px;\n      border-radius: 15px;\n      position: relative;\n      border: 3px solid rgba(255, 255, 255, 0.15);\n      box-shadow:\n        /* Primary outer shadow */\n        0 0 15px rgba(0, 0, 0, 0.6),\n        /* Metallic edge highlights */\n        0 0 0 3px rgba(180, 180, 180, 0.5),\n        /* Inner bevel highlights */\n        inset 0 4px 6px rgba(255, 255, 255, 0.3),\n        /* Inner bevel shadows */\n        inset 0 -4px 6px rgba(0, 0, 0, 0.4),\n        /* Additional metallic depth */\n        0 0 3px rgba(200, 200, 200, 0.2),\n        /* Subtle outer glow */\n        0 0 20px rgba(0, 0, 0, 0.4);\n      background-image:\n        /* Brushed metal texture - horizontal lines */\n        repeating-linear-gradient(90deg,\n          rgba(180, 180, 180, 0.05) 0px,\n          rgba(180, 180, 180, 0.05) 1px,\n          rgba(120, 120, 120, 0.05) 1px,\n          rgba(120, 120, 120, 0.05) 2px),\n        /* Primary metallic gradient */\n        linear-gradient(145deg,\n          rgba(160, 160, 160, 0.15) 0%,\n          rgba(80, 80, 80, 0.15) 50%,\n          rgba(40, 40, 40, 0.15) 100%);\n    }\n\n    .header {\n      display: flex;\n      flex-direction: column;\n      gap: 8px;\n      margin-bottom: 15px;\n    }\n\n    .header-row1 {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      flex-wrap: nowrap;\n      gap: 8px;\n    }\n\n    .brand-time {\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    .brand {\n      font-size: 1.2em;\n      font-weight: bold;\n      color: rgb(0, 168, 168);\n    }\n\n    .time {\n      font-size: 0.8em;\n      margin-top: 2px;\n    }\n\n    .setpoint-humidity {\n      display: flex;\n      align-items: center;\n      gap: 10px;\n    }\n\n    .status-item {\n      display: flex;\n      align-items: center;\n      gap: 4px;\n      font-size: 0.9em;\n    }\n\n    #setpointDisplay,\n    #humidity {\n      color: rgb(0, 168, 168);\n    }\n\n    .status-icon {\n      stroke: currentColor;\n      fill: none;\n      stroke-width: 1.5;\n      width: 24px;\n      height: 24px;\n    }\n\n    .status-icon .fan-blades,\n    .status-icon .snowflake {\n      fill: currentColor;\n      opacity: 0.8;\n      transform-origin: center;\n      transition: transform 0.3s ease;\n    }\n\n    .wifi-signal {\n      fill: rgb(0, 168, 168);\n      transform-origin: center;\n    }\n\n    .status-label[data-active=\"true\"]~.status-icon .fan-blades {\n      animation: spin 2s linear infinite;\n    }\n\n    .status-label[data-active=\"true\"]~.status-icon .snowflake {\n      animation: spin 3s linear infinite;\n    }\n\n    .status-label[data-active=\"true\"]~.status-icon .wifi-signal {\n      animation: gradient-flow 2s linear infinite;\n      background: linear-gradient(to top,\n          rgb(0, 168, 168) 0%,\n          rgba(0, 168, 168, 0.8) 25%,\n          rgba(0, 168, 168, 0.4) 50%,\n          rgba(0, 168, 168, 0.2) 75%,\n          transparent 100%);\n    }\n\n    @keyframes gradient-flow {\n      0% {\n        stop-color: rgb(0, 168, 168);\n        stop-opacity: 1;\n      }\n\n      50% {\n        stop-color: rgba(0, 168, 168, 0.5);\n        stop-opacity: 0.5;\n      }\n\n      100% {\n        stop-color: rgb(0, 168, 168);\n        stop-opacity: 1;\n      }\n    }\n\n    @keyframes spin {\n      from {\n        transform: rotate(0deg);\n      }\n\n      to {\n        transform: rotate(360deg);\n      }\n    }\n\n    .header-row2 {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      flex-wrap: nowrap;\n      gap: 30px;\n    }\n\n    .status-indicator {\n      display: flex;\n      align-items: center;\n      gap: 4px;\n    }\n\n    .status-label {\n      background: #444;\n      padding: 3px 6px;\n      border-radius: 10px;\n      font-size: 0.75em;\n      transition: all 0.3s ease;\n      white-space: nowrap;\n    }\n\n    .status-label[data-active=\"true\"] {\n      background: #2ecc71;\n      color: #000;\n      box-shadow: 0 0 10px rgba(46, 204, 113, 0.8);\n    }\n\n    .main-display {\n      position: relative;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      margin: 20px 0;\n    }\n\n    .temp-control {\n      position: relative;\n      width: 120px;\n      height: 120px;\n      margin: 0 auto;\n    }\n\n    .setpoint-ring {\n      position: absolute;\n      width: 100%;\n      height: 100%;\n      border-radius: 50%;\n      border: 4px solid #777;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-size: 2em;\n      font-weight: bold;\n      transition: border-color 0.3s ease, box-shadow 0.3s ease;\n    }\n\n    #tempDisplay {\n      color: rgb(0, 168, 168);\n    }\n\n    .setpoint-ring.heating {\n      border-color: #ff5733;\n      box-shadow: 0 0 15px rgba(255, 87, 51, 0.7);\n    }\n\n    .setpoint-ring.cooling {\n      border-color: #00a8a8;\n      box-shadow: 0 0 15px rgba(0, 168, 168, 0.7);\n    }\n\n    .adjust-chevron {\n      position: absolute;\n      border: none;\n      background: transparent;\n      cursor: pointer;\n      padding: 10px;\n      z-index: 10;\n      width: 50px;\n      height: 50px;\n    }\n\n    .adjust-chevron.up {\n      right: -70px;\n      top: 50%;\n      transform: translateY(-50%) rotate(0deg);\n    }\n\n    .adjust-chevron.down {\n      left: -70px;\n      top: 50%;\n      transform: translateY(-50%) rotate(0deg);\n    }\n\n    .adjust-chevron svg {\n      fill: #ffa726;\n      width: 100%;\n      height: 100%;\n    }\n\n    .mode-controls {\n      display: grid;\n      grid-template-columns: repeat(4, 1fr);\n      gap: 8px;\n      margin: 15px 0;\n      transform: translateX(32px);\n    }\n\n    .mode-button {\n      width: 70px;\n      height: 70px;\n      padding: 5px;\n      position: relative;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      transition: all 0.3s ease;\n      border: 3px solid #aaa;\n      border-radius: 8px;\n      background: #444;\n      box-shadow:\n        inset 0 0 3px rgba(255, 255, 255, 0.3),\n        inset 0 0 2px rgba(0, 0, 0, 0.4);\n    }\n\n    .mode-button span {\n      margin-top: 4px;\n      font-size: 0.9em;\n    }\n\n    .mode-icon {\n      font-size: 70px;\n    }\n\n    .mode-button.heat span,\n    .mode-button.heat .mode-icon {\n      color: #ff6f00;\n    }\n\n    .mode-button.fan span,\n    .mode-button.fan .mode-icon {\n      color: #4faedc;\n    }\n\n    .mode-button.cool span,\n    .mode-button.cool .mode-icon {\n      color: #00a8a8;\n    }\n\n    .mode-button.off span,\n    .mode-button.off .mode-icon {\n      color: rgb(240, 5, 107);\n    }\n\n    .mode-button.active {\n      box-shadow:\n        0 0 10px rgba(0, 229, 229, 0.8),\n        inset 0 0 3px rgba(255, 255, 255, 0.4),\n        inset 0 0 2px rgba(0, 0, 0, 0.4);\n      border-color: #00e5e5;\n      transform: translateY(-1px);\n    }\n\n    .mode-button.active.heat {\n      border-color: #ff5733;\n      box-shadow:\n        0 0 15px rgba(255, 87, 51, 0.7),\n        inset 0 0 3px rgba(255, 255, 255, 0.4),\n        inset 0 0 2px rgba(0, 0, 0, 0.4);\n    }\n\n    .mode-button.active.cool {\n      border-color: #00a8a8;\n      box-shadow:\n        0 0 15px rgba(0, 168, 168, 0.7),\n        inset 0 0 3px rgba(255, 255, 255, 0.4),\n        inset 0 0 2px rgba(0, 0, 0, 0.4);\n    }\n\n    .mode-button:hover {\n      transform: translateY(-3px);\n      box-shadow:\n        inset 0 0 3px rgba(255, 255, 255, 0.3),\n        inset 0 0 2px rgba(0, 0, 0, 0.4),\n        0 5px 10px rgba(0, 0, 0, 0.5);\n    }\n\n    .info-container {\n      display: flex;\n      flex-direction: column;\n      gap: 6px;\n      margin-top: 15px;\n      background: #2a2f36;\n      padding: 12px;\n      border-radius: 8px;\n      font-size: 0.9em;\n    }\n\n    .infoRow {\n      display: flex;\n      justify-content: space-between;\n      font-size: 1em;\n      color: #fff;\n    }\n\n    .infoRowName {\n      font-weight: bold;\n      color: #ffa726;\n    }\n\n    .infoRowValue {\n      color: rgb(0, 168, 168);\n    }\n\n    #indoorTemp,\n    #outdoorTemp,\n    #oaActuator,\n    #cwActuator,\n    #hwActuator,\n    #vfd,\n    #pumpPressure,\n    #buildingPressure {\n      color: rgb(0, 168, 168);\n    }\n\n    .control-modes {\n      display: grid;\n      grid-template-columns: repeat(4, 1fr);\n      gap: 10px;\n      margin: 20px 0;\n      padding: 15px;\n      background: #2a2f36;\n      border-radius: 8px;\n    }\n\n    .control-button {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 8px;\n      padding: 12px;\n      background: #444;\n      border-radius: 8px;\n      cursor: pointer;\n      transition: all 0.3s ease;\n      border: 2px solid rgba(0, 168, 168, 0.3);\n    }\n\n    .control-button:hover {\n      transform: translateY(-2px);\n      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\n    }\n\n    .control-label {\n      font-size: 0.9em;\n      color: #ffa726;\n      font-weight: bold;\n    }\n\n    .control-value {\n      color: rgb(0, 168, 168);\n      font-weight: bold;\n    }\n\n    .control-button[data-active=\"true\"] {\n      border-color: rgb(0, 168, 168);\n      background: rgba(0, 168, 168, 0.1);\n      box-shadow:\n        0 0 15px rgba(0, 168, 168, 0.4),\n        inset 0 0 8px rgba(0, 168, 168, 0.2);\n    }\n\n    .control-button[data-active=\"true\"] .control-value {\n      color: rgb(0, 168, 168);\n      text-shadow: 0 0 10px rgba(0, 168, 168, 0.8);\n    }\n\n    .theme-toggle {\n      margin-top: 15px;\n      text-align: center;\n      cursor: pointer;\n      padding: 8px;\n      background: #2a2f36;\n      border-radius: 8px;\n      transition: all 0.3s ease;\n      font-size: 0.9em;\n    }\n\n    .theme-toggle:hover {\n      background: #444;\n    }\n\n    kground: #444;\n    }\n\n    /* Add new LED styles */\n    .brand-container {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .led-indicator {\n      width: 8px;\n      height: 8px;\n      background-color: #00ff00;\n      border-radius: 50%;\n      box-shadow: 0 0 5px #00ff00;\n      animation: pulse 2s ease-in-out infinite;\n    }\n\n    @keyframes pulse {\n      0% {\n        opacity: 0.3;\n        box-shadow: 0 0 2px #00ff00;\n      }\n\n      50% {\n        opacity: 1;\n        box-shadow: 0 0 10px #00ff00;\n      }\n\n      100% {\n        opacity: 0.3;\n        box-shadow: 0 0 2px #00ff00;\n      }\n    }\n  </style>\n</head>\n\n<body>\n  <div class=\"thermostat-container\">\n    <!-- Header -->\n    <div class=\"header\">\n      <div class=\"header-row1\">\n        <div class=\"brand-time\">\n          <div class=\"brand-container\">\n            <div class=\"brand\">Automata</div>\n            <div class=\"led-indicator\"></div>\n          </div>\n          <div class=\"time\">8:30 AM</div>\n        </div>\n        <div class=\"setpoint-humidity\">\n          <div class=\"status-item\">\n            <svg class=\"status-icon\" viewBox=\"0 0 24 24\">\n              <path d=\"M8 2v20H3V7l5-5zM8 22h13V8h-5V2l-8 6zM16 8v14M11 14h4M11 10h4\" />\n            </svg>\n            <span id=\"setpointDisplay\">72</span>°\n          </div>\n          <div class=\"status-item\">\n            <svg class=\"status-icon\" viewBox=\"0 0 24 24\">\n              <path d=\"M12 2S7 9 7 13c0 2.8 2.2 5 5 5s5-2.2 5-5c0-4-5-11-5-11z\" />\n            </svg>\n            <span id=\"humidity\">48</span>%\n          </div>\n        </div>\n      </div>\n      <div class=\"header-row2\">\n        <div class=\"status-indicator\">\n          <span class=\"status-label\" id=\"mqttStatus\" data-active=\"false\">MQTT</span>\n          <svg class=\"status-icon\" viewBox=\"0 0 24 24\">\n            <path class=\"wifi-signal\"\n              d=\"M12 3C7.95 3 4.21 4.34 1.2 6.6L3 9C5.5 7.12 8.62 6 12 6C15.38 6 18.5 7.12 21 9L22.8 6.6C19.79 4.34 16.05 3 12 3M12 9C9.3 9 6.81 9.89 4.8 11.4L6.6 13.8C8.1 12.67 9.97 12 12 12C14.03 12 15.9 12.67 17.4 13.8L19.2 11.4C17.19 9.89 14.7 9 12 9M12 15C10.65 15 9.4 15.45 8.4 16.2L12 21L15.6 16.2C14.6 15.45 13.35 15 12 15\" />\n          </svg>\n        </div>\n        <div class=\"status-indicator\">\n          <svg class=\"status-icon\" viewBox=\"0 0 24 24\">\n            <path d=\"M12 2c2 0 3.5 1.5 3.5 3.5 0 1.6-1.2 3-3 3.4V10h-1V8.9c-1.8-.4-3-1.8-3-3.4C8.5 3.5 10 2 12 2Z\" />\n            <path d=\"M10 12c-1.7 0-3 1.3-3 3v3h10v-3c0-1.7-1.3-3-3-3h-4Z\" />\n          </svg>\n          <span class=\"status-label\" id=\"occupiedStatus\" data-active=\"false\">Occupied</span>\n        </div>\n        <div class=\"status-indicator\">\n          <span class=\"status-label\" id=\"fanStatus\" data-active=\"false\">Running</span>\n          <svg class=\"status-icon\" viewBox=\"0 0 24 24\">\n            <g class=\"fan-blades\">\n              <path\n                d=\"M12 2C8 2 7 6 7 6C7 6 10 6 12 7C14 8 14 10 14 10C14 10 11 9 9 9C7 9 4 10 4 10C4 10 5 7 6 5C7 3 9 2 12 2Z\" />\n              <path\n                d=\"M22 12C22 8 18 7 18 7C18 7 18 10 17 12C16 14 14 14 14 14C14 14 15 11 15 9C15 7 14 4 14 4C14 4 17 5 19 6C21 7 22 12 22 12Z\" />\n              <path\n                d=\"M12 22C16 22 17 18 17 18C17 18 14 18 12 17C10 16 10 14 10 14C10 14 13 15 15 15C17 15 20 14 20 14C20 14 19 17 18 19C17 21 15 22 12 22Z\" />\n              <path\n                d=\"M2 12C2 16 6 17 6 17C6 17 6 14 7 12C8 10 10 10 10 10C10 10 9 13 9 15C9 17 10 20 10 20C10 20 7 19 5 18C3 17 2 12 2 12Z\" />\n            </g>\n            <circle cx=\"12\" cy=\"12\" r=\"2\" fill=\"currentColor\" />\n          </svg>\n        </div>\n        <div class=\"status-indicator\">\n          <span class=\"status-label\" id=\"freezeStatus\" data-active=\"false\">Normal</span>\n          <svg class=\"status-icon\" viewBox=\"0 0 24 24\">\n            <g class=\"snowflake\">\n              <path d=\"M12 2 L12 22 M2 12 L22 12\" />\n              <path d=\"M4.93 4.93 L19.07 19.07 M19.07 4.93 L4.93 19.07\" />\n              <path d=\"M12 2 L10 5 L14 5 L12 2 M12 22 L10 19 L14 19 L12 22\" />\n              <path d=\"M2 12 L5 10 L5 14 L2 12 M22 12 L19 10 L19 14 L22 12\" />\n              <path d=\"M4.93 4.93 L6 7.5 L8 5.5 L4.93 4.93 M19.07 19.07 L17 16.5 L15 18.5 L19.07 19.07\" />\n              <path d=\"M19.07 4.93 L16.5 6 L18.5 8 L19.07 4.93 M4.93 19.07 L7.5 17 L5.5 15 L4.93 19.07\" />\n            </g>\n            <circle cx=\"12\" cy=\"12\" r=\"1\" fill=\"currentColor\" />\n          </svg>\n        </div>\n      </div>\n    </div>\n\n    <!-- Main Display -->\n    <div class=\"main-display\">\n      <div class=\"temp-control\">\n        <div class=\"setpoint-ring\" id=\"setpointRing\">\n          <span id=\"tempDisplay\">72°F</span>\n        </div>\n        <button class=\"adjust-chevron up\" onclick=\"thermostat.adjustTemperature(1)\">\n                  <svg viewBox=\"0 0 24 24\">\n                      <path d=\"M12 8l6 6H6z\" />\n                  </svg>\n              </button>\n        <button class=\"adjust-chevron down\" onclick=\"thermostat.adjustTemperature(-1)\">\n                  <svg viewBox=\"0 0 24 24\">\n                      <path d=\"M12 16l-6-6h12z\" />\n                  </svg>\n              </button>\n      </div>\n    </div>\n\n    <!-- Mode Controls -->\n    <div class=\"mode-controls\">\n      <div class=\"mode-button heat\" id=\"heatingMode\" onclick=\"thermostat.setMode('heating')\">\n        <span class=\"material-icons mode-icon\">whatshot</span>\n        <span>Heat</span>\n      </div>\n      <div class=\"mode-button fan\" id=\"fanMode\" onclick=\"thermostat.setMode('fan')\">\n        <span class=\"material-icons mode-icon\">air</span>\n        <span>Fan</span>\n      </div>\n      <div class=\"mode-button cool\" id=\"coolingMode\" onclick=\"thermostat.setMode('cooling')\">\n        <span class=\"material-icons mode-icon\">ac_unit</span>\n        <span>Cool</span>\n      </div>\n      <div class=\"mode-button off\" id=\"offMode\" onclick=\"thermostat.setMode('off')\">\n        <span class=\"material-icons mode-icon\">power_settings_new</span>\n        <span>Off</span>\n      </div>\n    </div>\n\n    <!-- Info Container -->\n    <div class=\"info-container\">\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">Indoor Temp</span>\n        <span class=\"infoRowValue\" id=\"indoorTemp\">72°F</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">Mixed Air</span>\n        <span class=\"infoRowValue\" id=\"mixedAir\">68°F</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">Outdoor Temp</span>\n        <span class=\"infoRowValue\" id=\"outdoorTemp\">68°F</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">OA Actuator</span>\n        <span class=\"infoRowValue\"><span id=\"oaActuator\">0</span>%</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">CW Actuator</span>\n        <span class=\"infoRowValue\"><span id=\"cwActuator\">0</span>%</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">HW Actuator</span>\n        <span class=\"infoRowValue\"><span id=\"hwActuator\">0</span>%</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">VFD</span>\n        <span class=\"infoRowValue\"><span id=\"vfd\">0</span>Hz</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">Pump Pressure</span>\n        <span class=\"infoRowValue\"><span id=\"pumpPressure\">0</span>Psi</span>\n      </div>\n      <div class=\"infoRow\">\n        <span class=\"infoRowName\">Building Pressure</span>\n        <span class=\"infoRowValue\"><span id=\"buildingPressure\">0</span>inWC</span>\n      </div>\n    </div>\n\n    <!-- Control Mode Buttons -->\n    <div class=\"control-modes\">\n      <div class=\"control-button\" data-type=\"fan\" data-active=\"false\" onclick=\"thermostat.toggleControlMode('fan')\">\n        <span class=\"control-label\">Fan Control</span>\n        <span class=\"control-value\" id=\"fanControlMode\">VFD</span>\n      </div>\n      <div class=\"control-button\" data-type=\"oa\" data-active=\"false\" onclick=\"thermostat.toggleControlMode('oa')\">\n        <span class=\"control-label\">OA Actuator</span>\n        <span class=\"control-value\" id=\"oaControlMode\">MOD</span>\n      </div>\n      <div class=\"control-button\" data-type=\"heat\" data-active=\"false\" onclick=\"thermostat.toggleControlMode('heat')\">\n        <span class=\"control-label\">Heat Control</span>\n        <span class=\"control-value\" id=\"heatControlMode\">MOD</span>\n      </div>\n      <div class=\"control-button\" data-type=\"cool\" data-active=\"false\" onclick=\"thermostat.toggleControlMode('cool')\">\n        <span class=\"control-label\">Cool Control</span>\n        <span class=\"control-value\" id=\"coolControlMode\">MOD</span>\n      </div>\n    </div>\n\n    <!-- Theme Toggle -->\n    <div class=\"theme-toggle\" onclick=\"thermostat.toggleTheme()\">Toggle Dark/Light Mode</div>\n  </div>\n  <script>\n    (function(scope) {  // Changed to pass scope\n    let thermoState = {\n    currentTemp: 72,\n    setpoint: 72,\n    mode: \"off\",\n    theme: \"dark\",\n    humidity: 48,\n    occupied: false,\n    freezeStatus: true,\n    fanStatus: false,\n    mqttStatus: false,\n    showingSetpoint: false,\n    indoorTemp: 72,\n    outdoorTemp: 68,\n    mixedAir: 72,    // Added mixedAir\n    oaActuator: 0,\n    cwActuator: 0,\n    hwActuator: 0,\n    pumpPressure: 0,\n    buildingPressure: 0,\n    vfd: 0,\n    time: \"8:30 AM\",\n    fanControl: \"vfd\",\n    oaControl: \"mod\",\n    heatControl: \"mod\",\n    coolControl: \"mod\"\n    };\n    \n    function saveState() {\n    localStorage.setItem(\"thermostatState\", JSON.stringify(thermoState));\n    }\n    \n    function updateDisplay() {\n    const dialVal = thermoState.showingSetpoint ? thermoState.setpoint : thermoState.currentTemp;\n    document.getElementById(\"tempDisplay\").textContent = dialVal + \"°F\";\n    document.getElementById(\"setpointDisplay\").textContent = thermoState.setpoint;\n    document.querySelector(\".time\").textContent = thermoState.time;\n    \n    document.getElementById(\"humidity\").textContent = thermoState.humidity;\n    document.getElementById(\"indoorTemp\").textContent = thermoState.indoorTemp + \"°F\";\n    document.getElementById(\"outdoorTemp\").textContent = thermoState.outdoorTemp + \"°F\";\n    \n    document.getElementById(\"occupiedStatus\").dataset.active = thermoState.occupied;\n    document.getElementById(\"freezeStatus\").dataset.active = thermoState.freezeStatus;\n    document.getElementById(\"fanStatus\").dataset.active = thermoState.fanStatus;\n    document.getElementById(\"mqttStatus\").dataset.active = thermoState.mqttStatus;\n    \n    const ringEl = document.getElementById(\"setpointRing\");\n    ringEl.classList.remove(\"heating\", \"cooling\");\n    if (thermoState.mode === \"heating\") {\n    ringEl.classList.add(\"heating\");\n    } else if (thermoState.mode === \"cooling\") {\n    ringEl.classList.add(\"cooling\");\n    }\n    \n    document.querySelectorAll(\".mode-button\").forEach((btn) => {\n    btn.classList.remove(\"active\", \"heat\", \"cool\");\n    });\n    const activeBtn = document.getElementById(thermoState.mode + \"Mode\");\n    if (activeBtn) {\n    activeBtn.classList.add(\"active\");\n    if (thermoState.mode === \"heating\") {\n    activeBtn.classList.add(\"heat\");\n    } else if (thermoState.mode === \"cooling\") {\n    activeBtn.classList.add(\"cool\");\n    }\n    }\n    \n    document.getElementById(\"oaActuator\").textContent = thermoState.oaActuator;\n    document.getElementById(\"cwActuator\").textContent = thermoState.cwActuator;\n    document.getElementById(\"hwActuator\").textContent = thermoState.hwActuator;\n    document.getElementById(\"vfd\").textContent = thermoState.vfd;\n    document.getElementById(\"pumpPressure\").textContent = thermoState.pumpPressure;\n    document.getElementById(\"buildingPressure\").textContent = thermoState.buildingPressure;\n    document.getElementById(\"mixedAir\").textContent = thermoState.mixedAir + \"°F\";\n    \n    // Update control mode displays\n    document.getElementById(\"fanControlMode\").textContent = thermoState.fanControl.toUpperCase();\n    document.getElementById(\"oaControlMode\").textContent = thermoState.oaControl.toUpperCase();\n    document.getElementById(\"heatControlMode\").textContent = thermoState.heatControl.toUpperCase();\n    document.getElementById(\"coolControlMode\").textContent = thermoState.coolControl.toUpperCase();\n    \n    // Update control button active states\n    document.querySelector(`.control-button[data-type=\"fan\"]`).dataset.active = (thermoState.fanControl === \"triac\");\n    document.querySelector(`.control-button[data-type=\"oa\"]`).dataset.active = (thermoState.oaControl === \"triac\");\n    document.querySelector(`.control-button[data-type=\"heat\"]`).dataset.active = (thermoState.heatControl === \"triac\");\n    document.querySelector(`.control-button[data-type=\"cool\"]`).dataset.active = (thermoState.coolControl === \"dx\");\n    \n    applyTheme(thermoState.theme);\n    }\n    \n    function applyTheme(theme) {\n    const container = document.querySelector(\".thermostat-container\");\n    const infoContainer = document.querySelector(\".info-container\");\n    const themeToggle = document.querySelector(\".theme-toggle\");\n    \n    if (theme === \"light\") {\n    container.style.background = \"#ffffff\";\n    container.style.color = \"#000000\";\n    infoContainer.style.background = \"#f0f0f0\";\n    themeToggle.style.background = \"#f0f0f0\";\n    } else {\n    container.style.background = \"#15171B\";\n    container.style.color = \"#ffffff\";\n    infoContainer.style.background = \"#2a2f36\";\n    themeToggle.style.background = \"#2a2f36\";\n    }\n    }\n    \n    window.thermostat = {\n    adjustTemperature(amount) {\n    const oldSetpoint = thermoState.setpoint;\n    thermoState.setpoint = Math.max(50, Math.min(90, thermoState.setpoint + amount));\n    thermoState.showingSetpoint = true;\n    \n    console.log(`Setpoint adjusted: ${oldSetpoint} -> ${thermoState.setpoint}`);\n    \n    document.getElementById(\"setpointDisplay\").textContent = thermoState.setpoint;\n    document.getElementById(\"tempDisplay\").textContent = thermoState.setpoint + \"°F\";\n    \n    if (thermoState.setpointTimeout) {\n    clearTimeout(thermoState.setpointTimeout);\n    }\n    \n    thermoState.setpointTimeout = setTimeout(() => {\n    thermoState.showingSetpoint = false;\n    document.getElementById(\"tempDisplay\").textContent = thermoState.currentTemp + \"°F\";\n    updateDisplay();\n    }, 3000);\n    \n    saveState();\n    scope.send({\n        topic: \"setpoint\",\n        payload: thermoState.setpoint\n    });\n    console.log(\"Setpoint message sent:\", thermoState.setpoint);\n    },\n    \n    setMode(mode) {\n    thermoState.mode = mode;\n    updateDisplay();\n    saveState();\n    scope.send({ payload: { mode: mode } });\n    },\n    \n    toggleTheme() {\n    thermoState.theme = thermoState.theme === \"dark\" ? \"light\" : \"dark\";\n    updateDisplay();\n    saveState();\n    },\n    \n    toggleControlMode(type) {\n    let payload;\n    let topic;\n    \n    switch(type) {\n    case 'fan':\n    payload = thermoState.fanControl === 'vfd' ? 'triac' : 'vfd';\n    thermoState.fanControl = payload;\n    topic = 'controlMode_Fan';\n    break;\n    case 'oa':\n    payload = thermoState.oaControl === 'mod' ? 'triac' : 'mod';\n    thermoState.oaControl = payload;\n    topic = 'controlMode_OA_Actuator';\n    break;\n    case 'heat':\n    payload = thermoState.heatControl === 'mod' ? 'triac' : 'mod';\n    thermoState.heatControl = payload;\n    topic = 'controlMode_Heating';\n    break;\n    case 'cool':\n    payload = thermoState.coolControl === 'mod' ? 'dx' : 'mod';\n    thermoState.coolControl = payload;\n    topic = 'controlMode_Cooling';\n    break;\n    }\n    \n    scope.send({\n        topic: topic,\n        payload: payload\n    });\n    \n    updateDisplay();\n    saveState();\n    }\n    };\n    \n    if (scope) {\n      scope.$watch(\"msg\", function (msg) {\n        if (msg && msg.payload) {\n          let stateChanged = false;\n  \n          if (msg.payload.mixedAir !== undefined) {\n          thermoState.mixedAir = parseFloat(msg.payload.mixedAir);\n          stateChanged = true;\n          }\n          \n          if (msg.payload.setpoint !== undefined) {\n          thermoState.setpoint = msg.payload.setpoint;\n          stateChanged = true;\n          }\n          \n          if (msg.payload.supply !== undefined) {\n          thermoState.indoorTemp = msg.payload.supply;\n          thermoState.currentTemp = msg.payload.supply;\n          stateChanged = true;\n          }\n          if (msg.payload.outdoorAir !== undefined) {\n          thermoState.outdoorTemp = msg.payload.outdoorAir;\n          stateChanged = true;\n          }\n          if (msg.payload.humidity !== undefined) {\n          thermoState.humidity = msg.payload.humidity;\n          stateChanged = true;\n          }\n          if (msg.payload.oaActuator !== undefined) {\n          thermoState.oaActuator = msg.payload.oaActuator;\n          stateChanged = true;\n          }\n          if (msg.payload.hwActuator !== undefined) {\n          thermoState.hwActuator = msg.payload.hwActuator;\n          stateChanged = true;\n          }\n          if (msg.payload.cwActuator !== undefined) {\n          thermoState.cwActuator = msg.payload.cwActuator;\n          stateChanged = true;\n          }\n          if (msg.payload.vfd !== undefined) {\n          thermoState.vfd = msg.payload.vfd;\n          stateChanged = true;\n          }\n          if (msg.payload.pumpPressure !== undefined) {\n          thermoState.pumpPressure = msg.payload.pumpPressure;\n          stateChanged = true;\n          }\n          if (msg.payload.buildingPressure !== undefined) {\n          thermoState.buildingPressure = msg.payload.buildingPressure;\n          stateChanged = true;\n          }\n          if (msg.payload.fanStatus !== undefined) {\n          thermoState.fanStatus = msg.payload.fanStatus;\n          stateChanged = true;\n          }\n          if (msg.payload.freezestat !== undefined) {\n          thermoState.freezeStatus = msg.payload.freezestat;\n          stateChanged = true;\n          }\n          if (msg.payload.occupied !== undefined) {\n          thermoState.occupied = msg.payload.occupied;\n          stateChanged = true;\n          }\n          if (msg.payload.connected !== undefined) {\n          thermoState.mqttStatus = msg.payload.connected;\n          stateChanged = true;\n          }\n          if (msg.payload.mode !== undefined) {\n          thermoState.mode = msg.payload.mode;\n          stateChanged = true;\n          }\n          if (msg.payload.time !== undefined) {\n          thermoState.time = msg.payload.time;\n          stateChanged = true;\n          }\n          \n          if (stateChanged) {\n          console.log(\"Updating state with:\", msg.payload);\n          updateDisplay();\n          saveState();\n          }\n        }\n      });\n    }\n    \n    // Send control mode messages to Node-RED when buttons are clicked\n    document.querySelectorAll('.control-button').forEach(button => {\n    button.addEventListener('click', function() {\n    const type = this.dataset.type;\n    let msg = {\n    topic: \"\",\n    payload: \"\"\n    };\n    \n    switch(type) {\n    case 'fan':\n    msg.topic = \"controlMode_Fan\";\n    msg.payload = thermoState.fanControl === 'vfd' ? 'triac' : 'vfd';\n    break;\n    case 'oa':\n    msg.topic = \"controlMode_OA_Actuator\";\n    msg.payload = thermoState.oaControl === 'mod' ? 'triac' : 'mod';\n    break;\n    case 'heat':\n    msg.topic = \"controlMode_Heating\";\n    msg.payload = thermoState.heatControl === 'mod' ? 'triac' : 'mod';\n    break;\n    case 'cool':\n    msg.topic = \"controlMode_Cooling\";\n    msg.payload = thermoState.coolControl === 'mod' ? 'triac' : 'mod';\n    break;\n    }\n    \n    scope.send(msg);\n    });\n    });\n  \n    updateDisplay();\n  })(scope);\n  </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1990,
+        "y": 1280,
+        "wires": [
+            [
+                "21e30cf1a6938aa9",
+                "d094bf6a63a211ba",
+                "6022781ea557ce35"
+            ]
+        ]
+    },
+    {
+        "id": "228baa905ad3a67d",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 53",
+        "func": "// First handle direct topic-based messages\nlet updatedValue;\nif (msg.topic === \"setpoint\") {\n    updatedValue = msg.payload;\n    global.set(\"thermostatData.setpoint\", updatedValue);\n} else if (msg.topic === \"mode\") {\n    updatedValue = msg.payload;\n    global.set(\"thermostatData.mode\", updatedValue);\n} \n\n// Retrieve current thermostat data\nconst thermostatData = {\n    setpoint: updatedValue || msg.payload.setpoint || global.get(\"thermostatData.setpoint\") || 72,\n    mode: msg.payload.mode || global.get(\"thermostatData.mode\") || 'off',\n    indoorTemp: msg.payload.supply || global.get(\"thermostatData.indoorTemp\") || 72,\n    outdoorTemp: msg.payload.outdoorAir || global.get(\"thermostatData.outdoorTemp\") || 68,\n    humidity: msg.payload.humidity || global.get(\"thermostatData.humidity\") || 40,\n    oaActuator: msg.payload.oaActuator || global.get(\"thermostatData.oaActuator\"),\n    vfd: msg.payload.vfd || global.get(\"thermostatData.vfd\"),\n    hwActuator: msg.payload.hwActuator || global.get(\"thermostatData.hwActuator\"),\n    cwActuator: msg.payload.cwActuator || global.get(\"thermostatData.cwActuator\"),\n    pumpPressure: msg.payload.pumpPressure || global.get(\"thermostatData.pumpPressure\"),\n    buildingPressure: msg.payload.buildingPressure || global.get(\"thermostatData.buildingPressure\")\n};\n\n// Save updated thermostat data to global context\nglobal.set(\"thermostatData\", thermostatData);\n\n// Pass the data along for any additional nodes that follow\nmsg.payload = thermostatData;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2010,
+        "y": 1180,
+        "wires": [
+            [
+                "f7c37dad07fb1a78"
+            ]
+        ]
+    },
+    {
+        "id": "21e30cf1a6938aa9",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 54",
+        "func": "\nfunction processControlModes(msg) {\n    // Initialize arrays for the multiple outputs\n    let outputs = [null, null, null, null];\n\n    // Extract topic and payload\n    const topic = msg.topic;\n    const payload = msg.payload;\n\n    // Process based on the incoming control mode topic\n    switch (topic) {\n        case \"controlMode_Fan\":\n            outputs[0] = { payload: payload };\n            node.status({\n                fill: payload === \"triac\" ? \"green\" : \"blue\",\n                shape: \"dot\",\n                text: `Fan: ${payload.toUpperCase()}`\n            });\n            break;\n\n        case \"controlMode_OA_Actuator\":\n            outputs[1] = { payload: payload };\n            node.status({\n                fill: payload === \"triac\" ? \"green\" : \"blue\",\n                shape: \"dot\",\n                text: `OA: ${payload.toUpperCase()}`\n            });\n            break;\n\n        case \"controlMode_Cooling\":\n            outputs[2] = { payload: payload };\n            node.status({\n                fill: payload === \"dx\" ? \"green\" : \"blue\",\n                shape: \"dot\",\n                text: `Cool: ${payload.toUpperCase()}`\n            });\n            break;\n\n        case \"controlMode_Heating\":\n            outputs[3] = { payload: payload };\n            node.status({\n                fill: payload === \"triac\" ? \"green\" : \"blue\",\n                shape: \"dot\",\n                text: `Heat: ${payload.toUpperCase()}`\n            });\n            break;\n\n        default:\n            node.status({\n                fill: \"yellow\",\n                shape: \"ring\",\n                text: \"Unknown control mode\"\n            });\n            return null;\n    }\n\n    // Log the processed control mode\n    node.error(`Processing ${topic}: ${payload}`);\n\n    return outputs;\n}\n\n// Process incoming message and return the output array\nreturn processControlModes(msg);",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2250,
+        "y": 1280,
+        "wires": [
+            [
+                "28bc0fc16d1adb28"
+            ],
+            [
+                "2bf07136bd646167"
+            ],
+            [
+                "a0deb5022976667d"
+            ],
+            [
+                "2e43d627051f0911"
+            ]
+        ]
+    },
+    {
+        "id": "1b081255a238d9e8",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "controlMode_Heating",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "controlMode_Heating",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2500,
+        "y": 1520,
+        "wires": [
+            [
+                "15012399cc6ace9a"
+            ]
+        ]
+    },
+    {
+        "id": "2bf07136bd646167",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "controlMode_OA_Actuator",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "controlMode_OA_Actuator",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "28bc0fc16d1adb28",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "controlMode_Fan",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 1080,
+        "wires": [
+            [
+                "58ff7f571ac91d64"
+            ]
+        ]
+    },
+    {
+        "id": "a0deb5022976667d",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "controlMode_Cooling",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2530,
+        "y": 1360,
+        "wires": [
+            [
+                "73217d22eb8a27bc"
+            ]
+        ]
+    },
+    {
+        "id": "44c124c6025b11ad",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "supply",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "supply",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 1260,
+        "wires": [
+            [
+                "37f6a9b0379e0c4a",
+                "2ef171ecd72f4349"
+            ]
+        ]
+    },
+    {
+        "id": "ec230aae169e71d4",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 1",
+        "func": "function formatData(msg) {\n    // Get the existing combined data from the flow context\n    let combinedData = flow.get(\"combinedData\") || {};\n\n    // Update the combined data based on the incoming topic\n    switch (msg.topic) {\n        case \"supply\":\n            combinedData.supply = msg.payload;\n            break;\n        case \"indoorTemp\":\n            combinedData.indoorTemp = msg.payload;\n            break;\n        case \"outdoorAir\":\n            combinedData.outdoorAir = msg.payload;\n            break;\n        case \"fanStatus\":\n            combinedData.fanStatus = msg.payload;\n            break;\n        case \"hwActuator\":\n            combinedData.hwActuator = parseFloat(msg.payload);\n            break;\n        case \"cwActuator\":\n            combinedData.cwActuator = parseFloat(msg.payload);\n            break;\n        case \"oaActuator\":\n            combinedData.oaActuator = msg.payload;\n            break;\n        case \"humidity\":\n            combinedData.humidity = msg.payload;\n            break;\n        case \"freezestat\":\n            combinedData.freezestat = msg.payload;\n            break;\n        case \"hilimit\":\n            combinedData.hilimit = msg.payload;\n            break;\n        case \"vfd\":\n            combinedData.vfd = msg.payload;\n            break;\n        case \"pumpPressure\":\n            combinedData.pumpPressure = msg.payload;\n            break;\n        case \"buildingPressure\":\n            combinedData.buildingPressure = msg.payload;\n            break;\n        case \"occupied\":\n            combinedData.occupied = msg.payload;\n            break;\n        case \"mode\":\n            combinedData.mode = msg.payload;\n            break;\n        case \"time\":\n            combinedData.time = msg.payload;\n            break;\n        case \"setpoint\":\n            combinedData.setpoint = msg.payload;\n            break;\n        case \"mixedAir\":\n            combinedData.mixedAir = parseFloat(msg.payload);\n            break;\n        case \"connected\":\n            combinedData.connected = msg.payload;\n            break;\n    }\n\n    // Update the timestamp for the latest update\n    combinedData.timestamp = new Date().toISOString();\n\n    // Store the updated combined data back in the flow context\n    flow.set(\"combinedData\", combinedData);\n\n    // Prepare the message to send to the UI template\n    msg.payload = combinedData;\n\n    return msg;\n}\n\nreturn formatData(msg);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1780,
+        "y": 1280,
+        "wires": [
+            [
+                "1fe36d82e172d28a"
+            ]
+        ]
+    },
+    {
+        "id": "6b40acdb75d138da",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2760,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7e1b3f290664d755",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "HOA Link Out",
+        "mode": "link",
+        "links": [
+            "8c43597f7f4537a4",
+            "5604241ed549185f",
+            "bd91d979d7c971c3",
+            "7558f33c0eec720c",
+            "5460179e6d0527be"
+        ],
+        "x": 3045,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "92f373699b05c9a3",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "HOAMode",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "HOA_Mode",
+                "pt": "global",
+                "to": "thermostatData.HOAMode",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2910,
+        "y": 340,
+        "wires": [
+            [
+                "7e1b3f290664d755",
+                "a1b4576f32fc7472"
+            ]
+        ]
+    },
+    {
+        "id": "a1b4576f32fc7472",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 3100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "256cf27a790a0dd7",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 2",
+        "func": "// Retrieve HOA_Mode directly from global context with a default value if not set\nlet HOA_Mode = global.get(\"HOA_Mode\") || 'Auto';  // Default to 'Auto' if HOA_Mode is not found\n\n// Check if the incoming message contains a timestamp from the inject node\nif (msg.hasOwnProperty(\"timestamp\")) {\n    // Set HOA_Mode as msg.payload and send it with the topic \"HOAMode\"\n    msg.payload = HOA_Mode;\n    msg.topic = \"HOAMode\";\n\n    // Update node status to show the current HOA_Mode\n    node.status({ fill: \"blue\", shape: \"dot\", text: `HOA Mode: ${HOA_Mode}` });\n\n    return msg;\n}\n\n// Check if the incoming message is updating the HOA mode\nif (msg.topic === \"HOAMode\") {\n    // Update HOA_Mode based on the incoming payload\n    HOA_Mode = msg.payload;\n\n    // Save the updated HOA mode back to the global context\n    global.set(\"HOA_Mode\", HOA_Mode);\n\n    // Send the updated HOA mode as the output payload\n    msg.payload = HOA_Mode;\n    msg.topic = \"HOAMode\";\n\n    // Log the HOA mode update for verification\n    node.warn(\"Updated HOA Mode:\");\n    node.warn(HOA_Mode);\n\n    // Update node status to show the new HOA mode\n    node.status({ fill: \"green\", shape: \"dot\", text: `HOA Mode updated to: ${HOA_Mode}` });\n\n    return msg;\n}\n\n// If the message topic is not \"HOAMode\" and doesn't contain a timestamp, do not process further\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2420,
+        "y": 340,
+        "wires": [
+            [
+                "07a3599f686f9ae1",
+                "671a8bfe0d0f258e"
+            ]
+        ]
+    },
+    {
+        "id": "9622633b548dbeba",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "900",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "HOAMode",
+        "payload": "Auto",
+        "payloadType": "str",
+        "x": 2250,
+        "y": 340,
+        "wires": [
+            [
+                "256cf27a790a0dd7"
+            ]
+        ]
+    },
+    {
+        "id": "07a3599f686f9ae1",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2560,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "671a8bfe0d0f258e",
+        "type": "ui_template",
+        "z": "03439e94ed033c2f",
+        "group": "e80c2d3ab6e767c8",
+        "name": "Automata Logic Control HOA",
+        "order": 1,
+        "width": 20,
+        "height": 15,
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Enhanced Logic Control Panel</title>\n    <style>\n        /* Core Animations */\n        @keyframes bootAnimation {\n            0% {\n                opacity: 0;\n                transform: scale(0.95);\n                filter: brightness(0);\n            }\n\n            50% {\n                filter: brightness(0.5);\n            }\n\n            100% {\n                opacity: 1;\n                transform: scale(1);\n                filter: brightness(1);\n            }\n        }\n\n        @keyframes buttonFlash {\n            0% {\n                border-color: rgb(0, 168, 168);\n                box-shadow: 0 0 10px rgb(0, 168, 168);\n            }\n\n            50% {\n                border-color: #ff5733;\n                box-shadow: 0 0 10px #ff5733;\n            }\n\n            100% {\n                border-color: rgb(0, 168, 168);\n                box-shadow: 0 0 10px rgb(0, 168, 168);\n            }\n        }\n\n        /* HOA Panel Container */\n        .hoa-container {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            font-family: Arial, sans-serif;\n            padding: 15px;\n            width: 320px;\n            height: 500px;\n            background: linear-gradient(165deg, #1a1f25, #2c3e50, #1a1f25);\n            border-radius: 15px;\n            color: #ecf0f1;\n            border: 1px solid rgba(255, 255, 255, 0.1);\n            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.1);\n            position: relative;\n            overflow: hidden;\n            animation: bootAnimation 1.5s ease-out;\n        }\n\n        /* Title and Header */\n        .header {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            margin-bottom: 15px;\n            text-align: center;\n        }\n\n        .sub-title {\n            font-size: 0.9em;\n            font-weight: bold;\n            color: #ff8c42;\n            text-transform: uppercase;\n            font-family: Copperplate, serif;\n            text-shadow: 0 0 10px #ff8c42;\n        }\n\n        .title {\n            font-size: 1.4em;\n            font-weight: 600;\n            color: rgb(0, 168, 168);\n            text-transform: uppercase;\n            margin-top: 5px;\n            text-shadow: 0 0 15px rgba(0, 168, 168, 0.5);\n            font-family: Copperplate, serif;\n        }\n\n        /* Switch Container */\n        .switch-container {\n            display: flex;\n            gap: 10px;\n            padding: 15px;\n            border-radius: 15px;\n        }\n\n        .switch-option {\n            width: 70px;\n            height: 70px;\n            border-radius: 12px;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            justify-content: center;\n            cursor: pointer;\n            transition: all 0.3s ease;\n            background: linear-gradient(145deg, #2c3e50, #34495e);\n            border: 2px solid rgba(0, 168, 168, 0.1);\n        }\n\n        .switch-option.flashing {\n            animation: buttonFlash 0.5s ease-in-out;\n        }\n\n        .switch-option.active {\n            border-color: rgb(0, 168, 168);\n            box-shadow: 0 0 10px rgb(0, 168, 168);\n        }\n\n        .mode-icon {\n            font-size: 1.4em;\n            margin-bottom: 5px;\n        }\n\n        /* Status Indicators */\n        .status {\n            margin-top: 15px;\n            text-align: center;\n            width: 90%;\n        }\n\n        .status-indicator {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 8px;\n            margin-bottom: 10px;\n        }\n\n        .indicator {\n            width: 10px;\n            height: 10px;\n            border-radius: 50%;\n            background: #e74c3c;\n            box-shadow: 0 0 10px #e74c3c;\n        }\n\n        .digital-display,\n        .mode-value {\n            background: rgba(0, 0, 0, 0.2);\n            padding: 8px 15px;\n            border-radius: 8px;\n            margin: 5px 0;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n        }\n\n        .digital-readout {\n            font-family: 'Courier New', monospace;\n            color: #fff;\n        }\n\n        /* System Info Grid */\n        .system-info-grid {\n            display: grid;\n            grid-template-columns: repeat(3, 1fr);\n            gap: 8px;\n            padding: 8px;\n            font-family: 'Courier New', monospace;\n            width: 90%;\n            background: rgba(0, 0, 0, 0.2);\n            border-radius: 8px;\n            margin-top: 10px;\n        }\n\n        .info-label {\n            color: rgba(0, 168, 168, 0.7);\n            font-size: 0.8em;\n        }\n\n        .info-value {\n            color: #fff;\n            font-size: 1em;\n        }\n\n        /* Control Panel */\n        .control-panel {\n            position: relative;\n            margin-top: 15px;\n            width: 90%;\n        }\n\n        /* Updated Safety Cover Style */\n        .safety-cover {\n            position: absolute;\n            top: 0;\n            left: 0;\n            right: 0;\n            bottom: 0;\n            background: rgba(50, 50, 50, 0.85);\n            border: 2px solid #00a8a8;\n            border-radius: 15px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            cursor: pointer;\n            transition: transform 0.3s ease;\n            z-index: 100;\n            backdrop-filter: blur(4px);\n        }\n\n        .safety-cover.open {\n            transform: translateX(100%);\n        }\n\n        .cover-label {\n            color: #00a8a8;\n            font-size: 1.2em;\n            font-weight: bold;\n        }\n\n        .shutdown-button {\n            width: 100%;\n            background: rgba(231, 76, 60, 0.2);\n            border: 1px solid rgba(231, 76, 60, 0.4);\n            color: #e74c3c;\n            padding: 8px 15px;\n            border-radius: 4px;\n            font-size: 0.9em;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 5px;\n            cursor: pointer;\n            transition: all 0.3s ease;\n        }\n\n        .shutdown-button:hover:not(:disabled) {\n            background: rgba(231, 76, 60, 0.3);\n        }\n\n        .warning-icon {\n            color: #f1c40f;\n        }\n\n        /* Footer */\n        .system-footer {\n            position: absolute;\n            bottom: 10px;\n            width: 90%;\n            display: flex;\n            justify-content: space-between;\n            font-size: 0.7em;\n            color: rgba(255, 255, 255, 0.6);\n            font-family: 'Courier New', monospace;\n        }\n    </style>\n</head>\n\n<body>\n    <div class=\"hoa-container\" id=\"hoaContainer\">\n        <!-- Header -->\n        <div class=\"header\">\n            <div class=\"sub-title\">Automata Controls</div>\n            <div class=\"title\" style=\"margin-top: 15px;\">Logic</div>\n        </div>\n\n        <!-- Switches -->\n        <div class=\"switch-container\">\n            <div class=\"switch-option hand\" data-mode=\"Hand\" onclick=\"setActiveButton(this)\">\n                <div class=\"mode-icon\">⚡</div>\n                <div class=\"mode-label\">HAND</div>\n            </div>\n            <div class=\"switch-option off active\" data-mode=\"Off\" onclick=\"setActiveButton(this)\">\n                <div class=\"mode-icon\">⭘</div>\n                <div class=\"mode-label\">OFF</div>\n            </div>\n            <div class=\"switch-option auto\" data-mode=\"Auto\" onclick=\"setActiveButton(this)\">\n                <div class=\"mode-icon\">⟲</div>\n                <div class=\"mode-label\">AUTO</div>\n            </div>\n        </div>\n\n        <!-- Status Display -->\n        <div class=\"status\">\n            <div class=\"status-indicator\">\n                <div class=\"indicator\" id=\"statusIndicator\"></div>\n                <span class=\"status-text\" id=\"statusText\">System Status: OFFLINE</span>\n            </div>\n            <div class=\"digital-display\">\n                <span>Current Mode:</span>\n                <div class=\"digital-readout\" id=\"currentMode\">OFF</div>\n            </div>\n            <div class=\"mode-value\">\n                <span>MSG.PAYLOAD:</span>\n                <span class=\"digital-readout\" id=\"msgPayload\">OFF</span>\n            </div>\n        </div>\n\n        <!-- System Info Grid -->\n        <div class=\"system-info-grid\">\n            <div class=\"info-cell\">\n                <div class=\"info-label\">TEMP</div>\n                <div class=\"info-value\" id=\"temperatureValue\">23.4°C</div>\n            </div>\n            <div class=\"info-cell\">\n                <div class=\"info-label\">HUMIDITY</div>\n                <div class=\"info-value\" id=\"humidityValue\">40%</div>\n            </div>\n            <div class=\"info-cell\">\n                <div class=\"info-label\">STATUS</div>\n                <div class=\"info-value\" id=\"systemStatusValue\">NOMINAL</div>\n            </div>\n        </div>\n\n        <!-- Control Panel -->\n        <div class=\"control-panel\">\n            <div class=\"safety-cover\" id=\"safetyCover\">\n                <div class=\"cover-label\">SAFETY COVER</div>\n            </div>\n            <button class=\"shutdown-button\" id=\"shutdownButton\" disabled>\n                <div class=\"warning-icon\">⚠</div>\n                <span>SHUTDOWN</span>\n            </button>\n        </div>\n\n        <!-- Footer -->\n        <div class=\"system-footer\">\n            <span>SN: ACTRL-9385-X2</span>\n            <span>Firmware 3.1.4</span>\n        </div>\n    </div>\n\n    <script>\n        (function(scope) {\n            // Initialize state object with defaults\n            scope.state = {\n                statusText: 'OFFLINE',\n                currentMode: 'OFF',\n                statusColor: '#e74c3c',\n                temperature: 23.4,\n                humidity: 40,\n                systemStatus: 'NOMINAL',\n                safetyOpen: false,\n                activeButton: 'off',\n                msgPayload: 'OFF'\n            };\n\n            // Color mapping\n            const modeColors = {\n                \"Hand\": '#cfc20f',\n                \"Off\": '#e74c3c',\n                \"Auto\": 'rgb(0, 168, 168)'\n            };\n\n            // Load state from localStorage\n            function loadState() {\n                const savedState = localStorage.getItem('logicPanelState');\n                if (savedState) {\n                    scope.state = { ...scope.state, ...JSON.parse(savedState) };\n                    updateDisplay();\n                }\n            }\n\n            // Save state to localStorage\n            function saveState() {\n                localStorage.setItem('logicPanelState', JSON.stringify(scope.state));\n            }\n\n            // Update display elements\n            function updateDisplay() {\n                // Update status indicator\n                const indicator = document.getElementById('statusIndicator');\n                indicator.style.backgroundColor = scope.state.statusColor;\n                indicator.style.boxShadow = `0 0 10px ${scope.state.statusColor}`;\n\n                // Update status text\n                document.getElementById('statusText').textContent = `System Status: ${scope.state.statusText}`;\n                document.getElementById('statusText').style.color = scope.state.statusColor;\n\n                // Update mode displays\n                document.getElementById('currentMode').textContent = scope.state.currentMode;\n                document.getElementById('msgPayload').textContent = scope.state.msgPayload;\n\n                // Update system info\n                document.getElementById('temperatureValue').textContent = `${scope.state.temperature}°C`;\n                document.getElementById('humidityValue').textContent = `${scope.state.humidity}%`;\n                document.getElementById('systemStatusValue').textContent = scope.state.systemStatus;\n\n                // Update button states\n                document.querySelectorAll('.switch-option').forEach(btn => {\n                    btn.classList.remove('active');\n                    if (btn.dataset.mode.toLowerCase() === scope.state.activeButton.toLowerCase()) {\n                        btn.classList.add('active');\n                    }\n                });\n\n                // Update shutdown button\n                document.getElementById('shutdownButton').disabled = !scope.state.safetyOpen;\n\n                // Update safety cover\n                const safetyCover = document.getElementById('safetyCover');\n                if (scope.state.safetyOpen) {\n                    safetyCover.classList.add('open');\n                } else {\n                    safetyCover.classList.remove('open');\n                }\n            }\n\n            // Set active button and update state\n            window.setActiveButton = function(button) {\n                const mode = button.dataset.mode;\n                scope.state.activeButton = mode;\n                scope.state.currentMode = mode.toUpperCase();\n                scope.state.msgPayload = mode;\n                scope.state.statusColor = modeColors[mode];\n                scope.state.statusText = getStatusText(mode);\n                \n                button.classList.add('flashing');\n                setTimeout(() => {\n                    button.classList.remove('flashing');\n                }, 500);\n\n                updateDisplay();\n                saveState();\n                scope.send({ payload: mode });\n            };\n\n            function getStatusText(mode) {\n                switch (mode) {\n                    case 'Hand': return 'MANUAL CONTROL';\n                    case 'Auto': return 'AUTOMATIC';\n                    case 'Off': return 'OFFLINE';\n                    default: return 'UNKNOWN';\n                }\n            }\n\n            // Safety cover toggle\n            document.getElementById('safetyCover').addEventListener('click', function() {\n                scope.state.safetyOpen = !scope.state.safetyOpen;\n                updateDisplay();\n                saveState();\n            });\n\n            // Shutdown button handler\n            document.getElementById('shutdownButton').addEventListener('click', function() {\n                if (scope.state.safetyOpen) {\n                    scope.state.statusText = 'SHUTTING DOWN';\n                    scope.state.currentMode = 'SHUTDOWN';\n                    scope.state.safetyOpen = false;\n                    scope.send({ payload: 'shutdown' });\n                    updateDisplay();\n                    saveState();\n                    }\n                    });\n                    \n                    // Watch for incoming messages\n                    scope.$watch('msg', function(msg) {\n                    if (msg && msg.payload !== undefined) {\n                    // Update state based on incoming message\n                    if (typeof msg.payload === 'string') {\n                    scope.state.msgPayload = msg.payload;\n                    scope.state.statusColor = modeColors[msg.payload] || scope.state.statusColor;\n                    scope.state.statusText = getStatusText(msg.payload);\n                    scope.state.currentMode = msg.payload.toUpperCase();\n                    scope.state.activeButton = msg.payload;\n                    }\n                    \n                    // Update system values if provided\n                    if (msg.temperature) scope.state.temperature = msg.temperature;\n                    if (msg.humidity) scope.state.humidity = msg.humidity;\n                    if (msg.systemStatus) scope.state.systemStatus = msg.systemStatus;\n                    \n                    updateDisplay();\n                    saveState();\n                    }\n                    });\n                    \n                    // Simulate temperature and humidity changes\n                    setInterval(function() {\n                    scope.$apply(function() {\n                    scope.state.temperature = (parseFloat(scope.state.temperature) + (Math.random() - 0.5) * 0.1).toFixed(1);\n                    scope.state.humidity = Math.round(parseFloat(scope.state.humidity) + (Math.random() - 0.5) * 0.5);\n                    updateDisplay();\n                    saveState();\n                    });\n                    }, 2000);\n                    \n                    // Initial load\n                    loadState();\n                    updateDisplay();\n                    \n                    })(scope);\n                    </script>\n                    </body>\n                    \n                    </html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 2640,
+        "y": 340,
+        "wires": [
+            [
+                "6b40acdb75d138da",
+                "92f373699b05c9a3"
+            ]
+        ]
+    },
+    {
+        "id": "508177d7c1cd9741",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "fanStatus",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "FanStatus",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 1680,
+        "wires": [
+            [
+                "1f82470e26603fc7",
+                "1403122ee5bf27c6"
+            ]
+        ]
+    },
+    {
+        "id": "d1f7f9b647ce493b",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1.5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 1680,
+        "wires": [
+            [
+                "d6a909e17ebf3ded"
+            ]
+        ]
+    },
+    {
+        "id": "c94a6d26ed098daa",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "FreezeStat",
+        "func": "// Get supply temperature from global context\nconst supplyTemp = global.get(\"supply\") || 0;\n\n// Set message payload based on temperature threshold\nmsg.payload = supplyTemp > 40;\n\n// Add status indication for debugging\nnode.status({\n    fill: msg.payload ? \"green\" : \"red\",\n    shape: \"dot\",\n    text: `Supply Temp: ${supplyTemp}°F | ${msg.payload ? \"Normal\" : \"Low Temp\"}`\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1740,
+        "wires": [
+            [
+                "f5d41cda22f3f410"
+            ]
+        ]
+    },
+    {
+        "id": "9bfc63c2731f3092",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.6",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 1740,
+        "wires": [
+            [
+                "c94a6d26ed098daa"
+            ]
+        ]
+    },
+    {
+        "id": "f5d41cda22f3f410",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "freezestat",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "Freezestat",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 1740,
+        "wires": [
+            [
+                "2bd7f3890e1220f5",
+                "5040701f9f05ebf3"
+            ]
+        ]
+    },
+    {
+        "id": "04a604cd619fd47a",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "900",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 350,
+        "y": 1100,
+        "wires": [
+            [
+                "e949280d62856a12"
+            ]
+        ]
+    },
+    {
+        "id": "5b6db8b678b200ca",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.humidity",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 535,
+        "y": 1100,
+        "wires": [
+            [
+                "08f37ae3b8374b6b"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "a6d9bc8327cbe93e",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.tempc",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 525,
+        "y": 1060,
+        "wires": [
+            [
+                "37fd20364237b28a"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "37fd20364237b28a",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Temp Conversion",
+        "func": "// Function to convert Celsius to Fahrenheit\nfunction celsiusToFahrenheit(celsius) {\n    return ((celsius * 9) / 5 + 32).toFixed(2);\n}\n\n// Extract temperature value from the incoming message\nvar temperatureCelsius = msg.payload;\n\n// Add a +3 offset to the temperature\ntemperatureCelsius += 0;\n\n// Convert the adjusted temperature to Fahrenheit\nvar temperatureFahrenheit = celsiusToFahrenheit(temperatureCelsius);\n\n// Create a new message with the converted temperature\nmsg.payload = temperatureFahrenheit;\n\n// Return the modified message\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 575,
+        "y": 1060,
+        "wires": [
+            [
+                "5d3aa06f8dcc891b"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "1c1084741b1548b3",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "Save to Global",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "outdoorAir",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "outdoorAir",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 655,
+        "y": 1060,
+        "wires": [
+            [
+                "bc43ecebddd75c7a"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "595028c18c98e3e8",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "Save to Global",
+        "rules": [
+            {
+                "t": "set",
+                "p": "humidity",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "humidity",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 635,
+        "y": 1100,
+        "wires": [
+            [
+                "dd94ba0537bfebb9"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "08f37ae3b8374b6b",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Round to 2 Decimals",
+        "func": "msg.payload.humidity = parseFloat(msg.payload.humidity).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 585,
+        "y": 1100,
+        "wires": [
+            [
+                "595028c18c98e3e8"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "5d3aa06f8dcc891b",
+        "type": "json",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 615,
+        "y": 1060,
+        "wires": [
+            [
+                "1c1084741b1548b3"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "e949280d62856a12",
+        "type": "openweathermap",
+        "z": "03439e94ed033c2f",
+        "name": "Fcog Weather",
+        "wtype": "current",
+        "lon": "-85.496315",
+        "lat": "40.88339",
+        "city": "",
+        "country": "",
+        "language": "en",
+        "x": 455,
+        "y": 1100,
+        "wires": [
+            [
+                "5b6db8b678b200ca",
+                "a6d9bc8327cbe93e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "bc43ecebddd75c7a",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "OAT",
+        "mode": "link",
+        "links": [
+            "4221c87468655441"
+        ],
+        "x": 725,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "dd94ba0537bfebb9",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "Humidity",
+        "mode": "link",
+        "links": [
+            "dffde0aa8d490421"
+        ],
+        "x": 725,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "92aa8cc6f108e654",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "Weather",
+        "info": "",
+        "x": 360,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "f5646282d1da37a1",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "Belimo 10ks",
+        "info": "",
+        "x": 370,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "cfc2adcb4915741b",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "Safety Status",
+        "info": "",
+        "x": 370,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "1f82470e26603fc7",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "Fan",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "2bd7f3890e1220f5",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "Freeze",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 1800,
+        "wires": []
+    },
+    {
+        "id": "1403122ee5bf27c6",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "Fan Status",
+        "mode": "link",
+        "links": [
+            "94e0f8ce20376759"
+        ],
+        "x": 765,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "5040701f9f05ebf3",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "Freeze Status",
+        "mode": "link",
+        "links": [
+            "1c943afce09b1bf9"
+        ],
+        "x": 765,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "16f74371521ae9f6",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "HOA Control",
+        "info": "",
+        "x": 2270,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "2116ebf20620fa34",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "Thermostat Logic",
+        "info": "",
+        "x": 1840,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "d7f4177ac1b4638e",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 5",
+        "links": [
+            "37f6a9b0379e0c4a"
+        ],
+        "x": 1615,
+        "y": 1100,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "5723884f08c11165",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 6",
+        "links": [
+            "79a7fb00d84ed26b"
+        ],
+        "x": 1615,
+        "y": 1140,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "4221c87468655441",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 7",
+        "links": [
+            "bc43ecebddd75c7a"
+        ],
+        "x": 1615,
+        "y": 1180,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "dffde0aa8d490421",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 8",
+        "links": [
+            "dd94ba0537bfebb9"
+        ],
+        "x": 1615,
+        "y": 1220,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "94e0f8ce20376759",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 9",
+        "links": [
+            "1403122ee5bf27c6"
+        ],
+        "x": 1615,
+        "y": 1260,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "1c943afce09b1bf9",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 10",
+        "links": [
+            "5040701f9f05ebf3"
+        ],
+        "x": 1615,
+        "y": 1300,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "fd189b45767907d9",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 11",
+        "links": [
+            "d62aa05fd349edcf"
+        ],
+        "x": 1615,
+        "y": 1340,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "773e208d63467907",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Building Pressure",
+        "func": "// Base pressure and variation settings\nconst BASE_PRESSURE = 0.10;  // Base building pressure in inches water column\nconst VARIATION = 0.02;      // Maximum random variation\nlet lastPressure = global.get('lastSimulatedPressure') || BASE_PRESSURE;\n\n// Add some realistic variation to the pressure\nfunction simulatePressure() {\n    // Generate random variation between -VARIATION and +VARIATION\n    const randomVariation = (Math.random() * 2 - 1) * VARIATION;\n\n    // Gradually drift toward base pressure while adding variation\n    const drift = (BASE_PRESSURE - lastPressure) * 0.3;\n    let newPressure = lastPressure + drift + randomVariation;\n\n    // Ensure pressure stays within realistic bounds (0.05 to 0.15 inWC)\n    newPressure = Math.max(0.05, Math.min(0.15, newPressure));\n\n    // Round to 3 decimal places\n    newPressure = Math.round(newPressure * 1000) / 1000;\n\n    return newPressure;\n}\n\n// Generate new pressure value\nconst pressure = simulatePressure();\n\n// Store last pressure for next iteration\nglobal.set('lastSimulatedPressure', pressure);\n\n// Update message payload\nmsg.payload = pressure;\n\n// Show current pressure in status\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `Building Pressure: ${pressure} inWC`\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1480,
+        "wires": [
+            [
+                "c0b51e0748219bbf"
+            ]
+        ]
+    },
+    {
+        "id": "517571eb84a826e8",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.4",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 1480,
+        "wires": [
+            [
+                "773e208d63467907"
+            ]
+        ]
+    },
+    {
+        "id": "c0b51e0748219bbf",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "buildingPressure",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 1480,
+        "wires": [
+            [
+                "d62aa05fd349edcf"
+            ]
+        ]
+    },
+    {
+        "id": "d62aa05fd349edcf",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "Building Pressure",
+        "mode": "link",
+        "links": [
+            "fd189b45767907d9"
+        ],
+        "x": 765,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "a949782e52dde1bd",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Time",
+        "func": "// Node-RED HTTP request configuration\nmsg.url = 'http://worldtimeapi.org/api/timezone/America/New_York';\nmsg.method = 'GET';\n\n// Show fetching status\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Fetching time...\" });\n\n// Return msg object with HTTP request configuration\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 700,
+        "wires": [
+            [
+                "df44bf1d864a7393",
+                "60b308e8889fb4e2"
+            ]
+        ]
+    },
+    {
+        "id": "114a7cfddbb68635",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "900",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 700,
+        "wires": [
+            [
+                "a949782e52dde1bd"
+            ]
+        ]
+    },
+    {
+        "id": "df44bf1d864a7393",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "Time ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 650,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "87e934b661fb60f6",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "Time",
+        "mode": "link",
+        "links": [
+            "ce5dbc1fcfd28262",
+            "f82a3b886937875a"
+        ],
+        "x": 985,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "f82a3b886937875a",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 12",
+        "links": [
+            "87e934b661fb60f6"
+        ],
+        "x": 265,
+        "y": 880,
+        "wires": [
+            [
+                "455dfd21e96bd105"
+            ]
+        ]
+    },
+    {
+        "id": "455dfd21e96bd105",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Occupancy",
+        "func": "// Always set payload to true (occupied)\nmsg.payload = true;\n\n// Create status message\nconst statusText = \"Always Occupied | Current: true\";\nnode.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: statusText\n});\n\n// Save occupancy state to global context for other nodes\nglobal.set('occupied', true);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 880,
+        "wires": [
+            [
+                "9d8879cf15cf76f7",
+                "add988c6f7367466"
+            ]
+        ]
+    },
+    {
+        "id": "914d886457b6a615",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "Time",
+        "info": "",
+        "x": 330,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "9d8879cf15cf76f7",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "Occupancy",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 523.7695007324219,
+        "y": 793.7695007324219,
+        "wires": []
+    },
+    {
+        "id": "11905f2d11cc2968",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "Occupied",
+        "mode": "link",
+        "links": [
+            "634f48d011aadce0"
+        ],
+        "x": 675,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "634f48d011aadce0",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 13",
+        "links": [
+            "11905f2d11cc2968"
+        ],
+        "x": 1615,
+        "y": 1380,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "add988c6f7367466",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "occupied",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 880,
+        "wires": [
+            [
+                "11905f2d11cc2968"
+            ]
+        ]
+    },
+    {
+        "id": "a0c3c78683380109",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "time",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 870,
+        "y": 700,
+        "wires": [
+            [
+                "87e934b661fb60f6"
+            ]
+        ]
+    },
+    {
+        "id": "ff8129002c01b573",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "MQTT",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 1840,
+        "wires": []
+    },
+    {
+        "id": "e9ecc7da6f7004d6",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "MQTT",
+        "mode": "link",
+        "links": [
+            "651cff866235903c"
+        ],
+        "x": 745,
+        "y": 1900,
+        "wires": []
+    },
+    {
+        "id": "813bef70ab2f0960",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "connected",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 1900,
+        "wires": [
+            [
+                "e9ecc7da6f7004d6"
+            ]
+        ]
+    },
+    {
+        "id": "c2cae31ea44c28b8",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "3",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 290,
+        "y": 1900,
+        "wires": [
+            [
+                "813bef70ab2f0960"
+            ]
+        ]
+    },
+    {
+        "id": "60b308e8889fb4e2",
+        "type": "http request",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 700,
+        "wires": [
+            [
+                "75605388df5dd666"
+            ]
+        ]
+    },
+    {
+        "id": "75605388df5dd666",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "Time",
+        "func": "try {\n    // Convert the datetime to a Date object\n    const datetime = new Date(msg.payload.datetime);\n\n    // Format time as HH:MM AM/PM\n    msg.payload = datetime.toLocaleString('en-US', {\n        hour: 'numeric',\n        minute: '2-digit',\n        hour12: true,\n        timeZone: 'America/New_York'\n    });\n\n    node.status({ fill: \"green\", shape: \"dot\", text: msg.payload });\n} catch (error) {\n    node.status({ fill: \"red\", shape: \"dot\", text: \"Error parsing time data\" });\n    msg.payload = \"Error formatting time\";\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 700,
+        "wires": [
+            [
+                "a0c3c78683380109"
+            ]
+        ]
+    },
+    {
+        "id": "ce5dbc1fcfd28262",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 14",
+        "links": [
+            "87e934b661fb60f6"
+        ],
+        "x": 1615,
+        "y": 1060,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "d1cd2fb20e0764ad",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 2490,
+        "y": 1020,
+        "wires": [
+            [
+                "58ff7f571ac91d64"
+            ]
+        ]
+    },
+    {
+        "id": "6e8e367e9caa1255",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 2490,
+        "y": 1120,
+        "wires": [
+            [
+                "fb92741ee6c3179b"
+            ]
+        ]
+    },
+    {
+        "id": "3123d94550ebd097",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 2478.34619140625,
+        "y": 1284.1795654296875,
+        "wires": [
+            [
+                "73217d22eb8a27bc"
+            ]
+        ]
+    },
+    {
+        "id": "0ecbb395334f6397",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "15",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 2490,
+        "y": 1440,
+        "wires": [
+            [
+                "15012399cc6ace9a"
+            ]
+        ]
+    },
+    {
+        "id": "5460179e6d0527be",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 15",
+        "links": [
+            "7e1b3f290664d755"
+        ],
+        "x": 2105,
+        "y": 1380,
+        "wires": [
+            [
+                "21e30cf1a6938aa9"
+            ]
+        ]
+    },
+    {
+        "id": "06001a4a8ceb9ed0",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 2790,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "005a081164323b58",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 2790,
+        "y": 1000,
+        "wires": [
+            [
+                "72bf5af79d3e7bbb",
+                "9d3be9800f1208c2"
+            ]
+        ]
+    },
+    {
+        "id": "e9bc82b6113e26a0",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "3",
+        "payloadType": "num",
+        "x": 2790,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d2104c15bdcc950",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 2930,
+        "y": 1620,
+        "wires": [
+            [
+                "9f6976ecc3259e0c"
+            ]
+        ]
+    },
+    {
+        "id": "50af1c620a0ba699",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 3530,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5a2b5feecc5bbfd6",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 3530,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8cbd2e8f42e5b685",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "HeatingMod",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2990,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "72bf5af79d3e7bbb",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "OAMOD",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 3120,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "078ce11f45dad625",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "CoolingMod",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 3070,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "3d0cf3cd4c21459f",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "hwActuator",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "hwActuator",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3380,
+        "y": 1500,
+        "wires": [
+            [
+                "d87627a96594efe0",
+                "3a0180deb3a317f0"
+            ]
+        ]
+    },
+    {
+        "id": "d87627a96594efe0",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "hwActuator",
+        "mode": "link",
+        "links": [
+            "5d3cda78167b85c0"
+        ],
+        "x": 3505,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "dcf058f5a28597fb",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "cwActuator",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "cwActuator",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3500,
+        "y": 1340,
+        "wires": [
+            [
+                "f716dc56e84bd309",
+                "68ecb1d55dbe851b"
+            ]
+        ]
+    },
+    {
+        "id": "f716dc56e84bd309",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "cwActuator",
+        "mode": "link",
+        "links": [
+            "9f51526dc23f2b0e"
+        ],
+        "x": 3625,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "cb07a63a3d5ae70b",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "oaActuator",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "oaActuator",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3380,
+        "y": 1200,
+        "wires": [
+            [
+                "66aff63ae4e70fb6"
+            ]
+        ]
+    },
+    {
+        "id": "887bc6541d1ece90",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "vfd",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "vfd",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3420,
+        "y": 1100,
+        "wires": [
+            [
+                "a482ae8055c34b55"
+            ]
+        ]
+    },
+    {
+        "id": "a482ae8055c34b55",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "vfd",
+        "mode": "link",
+        "links": [
+            "d8f412e22e484dc6"
+        ],
+        "x": 3535,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "d8f412e22e484dc6",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 16",
+        "links": [
+            "a482ae8055c34b55"
+        ],
+        "x": 1615,
+        "y": 1420,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "5d3cda78167b85c0",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 17",
+        "links": [
+            "d87627a96594efe0"
+        ],
+        "x": 1615,
+        "y": 1460,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "9f51526dc23f2b0e",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 18",
+        "links": [
+            "f716dc56e84bd309"
+        ],
+        "x": 1615,
+        "y": 1500,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "ce25ce3b9026af2f",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 19",
+        "links": [
+            "66aff63ae4e70fb6"
+        ],
+        "x": 1615,
+        "y": 1540,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "651cff866235903c",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 20",
+        "links": [
+            "e9ecc7da6f7004d6"
+        ],
+        "x": 1615,
+        "y": 1580,
+        "wires": [
+            [
+                "ec230aae169e71d4"
+            ]
+        ]
+    },
+    {
+        "id": "664fd9adbf85b7af",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 3",
+        "func": "// Define voltage range for conversion\nconst minV = 0.00;    // Voltage at 100% open\nconst maxV = 8.5;    // Voltage at 0% open\n\n// Round incoming payload to 2 decimal places\nif (typeof msg.payload === 'number') {\n    // Convert the incoming payload to percentage, inverting the scale\n    // minV (0V) is 100% open, maxV (10V) is 0% open\n    msg.payload = (1 - ((msg.payload - minV) / (maxV - minV))) * 100;\n\n    // Ensure the percentage stays within 0-100 range\n    msg.payload = Math.min(Math.max(msg.payload, 0), 100);\n    msg.payload = Number(msg.payload.toFixed(2));\n    return msg;\n} else if (typeof msg.payload === 'string') {\n    // Try to convert string to number, calculate percentage, and round\n    let num = parseFloat(msg.payload);\n    if (!isNaN(num)) {\n        msg.payload = (1 - ((num - minV) / (maxV - minV))) * 100;\n        // Ensure the percentage stays within 0-100 range\n        msg.payload = Math.min(Math.max(msg.payload, 0), 100);\n        msg.payload = Number(msg.payload.toFixed(2));\n    }\n    return msg;\n} else {\n    // If payload is neither number nor convertible string, return unchanged\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3180,
+        "y": 1500,
+        "wires": [
+            [
+                "3d0cf3cd4c21459f"
+            ]
+        ]
+    },
+    {
+        "id": "2f9129725639aa43",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 4",
+        "func": "// Define scaling range\nconst minV = 4.80;    // Minimum voltage (0% open)\nconst maxV = 8.00;   // Maximum voltage (100% open)\n\n// Round incoming payload to 2 decimal places\nif (typeof msg.payload === 'number') {\n    // Convert the incoming payload to percentage\n    msg.payload = ((msg.payload - minV) / (maxV - minV)) * 100;\n    msg.payload = Number(msg.payload.toFixed(2));\n    return msg;\n} else if (typeof msg.payload === 'string') {\n    // Try to convert string to number, calculate percentage, and round\n    let num = parseFloat(msg.payload);\n    if (!isNaN(num)) {\n        msg.payload = ((num - minV) / (maxV - minV)) * 100;\n        msg.payload = Number(msg.payload.toFixed(2));\n    }\n    return msg;\n} else {\n    // If payload is neither number nor convertible string, return unchanged\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3320,
+        "y": 1340,
+        "wires": [
+            [
+                "dcf058f5a28597fb"
+            ]
+        ]
+    },
+    {
+        "id": "9d3be9800f1208c2",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 5",
+        "func": "// Round incoming payload to 2 decimal places\nif (typeof msg.payload === 'number') {\n    msg.payload = Number(msg.payload.toFixed(2));\n    return msg;\n} else if (typeof msg.payload === 'string') {\n    // Try to convert string to number and round\n    let num = parseFloat(msg.payload);\n    if (!isNaN(num)) {\n        msg.payload = Number(num.toFixed(2));\n    }\n    return msg;\n} else {\n    // If payload is neither number nor convertible string, return unchanged\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3180,
+        "y": 1200,
+        "wires": [
+            [
+                "cb07a63a3d5ae70b"
+            ]
+        ]
+    },
+    {
+        "id": "a3dbd1770ea25012",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 2928.134521484375,
+        "y": 1659.3846435546875,
+        "wires": [
+            [
+                "9f6976ecc3259e0c"
+            ]
+        ]
+    },
+    {
+        "id": "c9ca56296983c3bf",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 3190,
+        "y": 1420,
+        "wires": [
+            [
+                "2f9129725639aa43",
+                "190cb3195112c12b"
+            ]
+        ]
+    },
+    {
+        "id": "26f78607a743bdcf",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 3188.134521484375,
+        "y": 1459.3846435546875,
+        "wires": [
+            [
+                "2f9129725639aa43"
+            ]
+        ]
+    },
+    {
+        "id": "7d3b5363519c5015",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 6",
+        "func": "// Ensure the input is within the 0-10V range\nif (msg.payload < 0) {\n    msg.payload = 0;\n} else if (msg.payload > 10) {\n    msg.payload = 10;\n}\n\n// Determine the correct scaling factor\n// If 3.8V corresponds to 50.03 Hz, calculate the scaling factor based on that\nconst voltageToFrequencyRatio = 50.03 / 3.8; // Approximately 13.17 Hz per Volt\n\n// Convert voltage to frequency using the new scaling factor\nmsg.payload = msg.payload * voltageToFrequencyRatio;\n\n// Round the result to 2 decimal places\nmsg.payload = Number(msg.payload.toFixed(2));\n\n// Output the result\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3260,
+        "y": 1100,
+        "wires": [
+            [
+                "887bc6541d1ece90"
+            ]
+        ]
+    },
+    {
+        "id": "66aff63ae4e70fb6",
+        "type": "link out",
+        "z": "03439e94ed033c2f",
+        "name": "oaActuator",
+        "mode": "link",
+        "links": [
+            "ce25ce3b9026af2f"
+        ],
+        "x": 3505,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "475f29662cf70809",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "7",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 280,
+        "wires": [
+            [
+                "4bb5da31f6cb1648"
+            ]
+        ]
+    },
+    {
+        "id": "4bb5da31f6cb1648",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 46",
+        "func": "// Initialize the output structure with timestamp\nlet output = {\n    timestamp: new Date().toISOString(),\n    location: \"HeritageHuntington\",\n    system: \"MUA1\",\n    metrics: {},\n    alerts: []\n};\n\n// Retrieve relevant variables from global context\nconst supply = parseFloat(global.get(\"supply\")) || 42;\nconst setpoint = parseFloat(global.get(\"thermostatData.setpoint\")) || 68;\nconst oaActuator = parseFloat(global.get(\"oaActuator\")) || 0;\nconst hwActuator = parseFloat(global.get(\"hwActuator\")) || 0;\nconst freezeStat = !!global.get(\"Freezestat\");\nconst cwActuator = parseFloat(global.get(\"cwActuator\")) || 0;\nconst mixedAir = parseFloat(global.get(\"mixedAir\")) || 0;\nconst fanStatus = !!global.get(\"FanStatus\");\nconst occupied = !!global.get(\"occupied\");\n\n// Add values to metrics if they exist\nif (supply !== undefined && supply !== null) {\n    output.metrics[\"supply\"] = supply;\n}\n\nif (setpoint !== undefined && setpoint !== null) {\n    output.metrics[\"setpoint\"] = setpoint;\n}\n\nif (oaActuator !== undefined && oaActuator !== null) {\n    output.metrics[\"oaActuator\"] = oaActuator + \"%\";\n}\n\nif (hwActuator !== undefined && hwActuator !== null) {\n    output.metrics[\"hwActuator\"] = hwActuator + \"%\";\n}\n\nif (freezeStat !== undefined && freezeStat !== null) {\n    output.metrics[\"Freeze Stat\"] = freezeStat.toString();\n}\n\nif (cwActuator !== undefined && cwActuator !== null) {\n    output.metrics[\"cwActuator\"] = cwActuator + \"%\";\n}\n\nif (mixedAir !== undefined && mixedAir !== null) {\n    output.metrics[\"Mixed Air\"] = mixedAir;\n}\n\nif (fanStatus !== undefined && fanStatus !== null) {\n    output.metrics[\"Fan Status\"] = fanStatus.toString();\n}\n\nif (occupied !== undefined && occupied !== null) {\n    output.metrics[\"Occupied\"] = occupied.toString();\n}\n\n// Check for temperature thresholds and add alerts if necessary\nif (supply < 40 || supply > 140) {\n    output.alerts.push(`AHU1 Temp out of range: ${supply.toFixed(1)}°F`);\n    node.status({\n        fill: \"red\",\n        shape: \"ring\",\n        text: `Heating loop supply temp alarm: ${supply.toFixed(1)}°F`\n    });\n}\n\nif (mixedAir < 40 || mixedAir > 175) {\n    output.alerts.push(`AHU1 MixedAir Temp out of range: ${mixedAir.toFixed(1)}°F`);\n    node.status({\n        fill: \"red\",\n        shape: \"ring\",\n        text: `Mixed air temp alarm: ${mixedAir.toFixed(1)}°F`\n    });\n}\n\n// Update node status based on alerts\nif (output.alerts.length > 0) {\n    node.status({\n        fill: \"red\",\n        shape: \"ring\",\n        text: `Alarms detected: ${output.alerts.length}`\n    });\n} else {\n    output.alerts.push(\"All systems are functioning normally and within range\");\n    node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: `System normal: ${supply.toFixed(1)}°F, ${setpoint.toFixed(1)}°F`\n    });\n}\n\n// Prepare the output message\nmsg.payload = JSON.stringify(output) + '\\n';\nmsg.topic = \"locations/\" + output.location + \"/\" + output.system + \"/status\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 280,
+        "wires": [
+            [
+                "7fc5667f20a52e0a",
+                "840ef71317730472",
+                "429d341ca12b3820",
+                "c30d0da382a1824a",
+                "d3fce9ecb086cabf"
+            ]
+        ]
+    },
+    {
+        "id": "7fc5667f20a52e0a",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 47",
+        "func": "// Define the time interval in seconds for limiting \"No alarms detected\" messages\nvar noAlarmMessageInterval = 30;  // 5 minutes in seconds\n\n// Get the current time in seconds\nvar currentTime = Math.floor(Date.now() / 1000);\n\n// Retrieve the last time a \"No alarms detected\" message was sent from the global context\nvar lastNoAlarmTime = global.get('LastNoAlarmTime') || 0;\n\n// Debugging logs\nnode.log(`Current Time: ${currentTime}`);\nnode.log(`Last No Alarm Time: ${lastNoAlarmTime}`);\n\n// Check if the payload indicates \"No alarms detected\"\nif (typeof msg.payload === 'string' && msg.payload.includes(\"All OK. System is functioning normally.\")) {\n    // Check if enough time has passed since the last \"No alarms detected\" message was sent\n    if (currentTime - lastNoAlarmTime >= noAlarmMessageInterval) {\n        // Update the last time a \"No alarms detected\" message was sent in the global context\n        global.set('LastNoAlarmTime', currentTime);\n        node.status({ fill: \"green\", shape: \"dot\", text: \"No alarm message sent\" });\n        return msg;  // Allow the message to pass through\n    } else {\n        // Block the message if the interval hasn't passed\n        node.status({ fill: \"yellow\", shape: \"ring\", text: \"No alarm message blocked: Too frequent\" });\n        return null;  // Block the message\n    }\n} else {\n    // Allow any other alarm conditions or messages to pass through\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "d3fce9ecb086cabf",
+                "ec3fb7c21e02b386"
+            ]
+        ]
+    },
+    {
+        "id": "d3fce9ecb086cabf",
+        "type": "mqtt out",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "topic": "HeritageHuntingtonMUA1",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "adaf646bb1af200d",
+        "x": 830,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "840ef71317730472",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 103",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 470,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ec3fb7c21e02b386",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 104",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 670,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "429d341ca12b3820",
+        "type": "delay",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "4",
+        "rateUnits": "hour",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c30d0da382a1824a",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 48",
+        "func": "// Retrieve the incoming message\nvar systemStatus = msg.payload;\n\n// Check if the message contains an alarm\nif (systemStatus.message.includes(\"Alarm\")) {\n    // Allow alarm messages to pass through\n    return msg;\n} else {\n    // Block \"All OK\" messages by returning null\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e2dfd403adbd8a8d",
+        "type": "comment",
+        "z": "03439e94ed033c2f",
+        "name": "Status and Alarm Monitoring",
+        "info": "",
+        "x": 300,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "da8839af50f0c17e",
+        "type": "mqtt in",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "topic": "HoHMUA1SystemControlOut",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "d416c8e74d906acf",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1580,
+        "y": 1640,
+        "wires": [
+            [
+                "7cf6773741f34c78",
+                "b0a24b85d431be8b"
+            ]
+        ]
+    },
+    {
+        "id": "28da2cea8c8d5e6e",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2140,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "7cf6773741f34c78",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 7",
+        "func": "function parseSystemControl(msg) {\n    // Create array to hold all messages\n    let messages = [];\n\n    // Extract data from incoming payload\n    const data = msg.payload;\n\n    // Map each value to a message with appropriate topic\n    if (data.supply !== undefined) {\n        messages.push({ topic: 'supply', payload: data.supply });\n    }\n\n    if (data.setpoint !== undefined) {\n        messages.push({ topic: 'setpoint', payload: data.setpoint });\n    }\n\n    if (data.oaActuator !== undefined) {\n        messages.push({ topic: 'oaActuator', payload: data.oaActuator });\n    }\n\n    if (data.fanStatus !== undefined) {\n        messages.push({ topic: 'fanStatus', payload: data.fanStatus });\n    }\n\n    if (data.cwActuator !== undefined) {\n        messages.push({ topic: 'cwActuator', payload: data.cwActuator });\n    }\n\n    if (data.freezestat !== undefined) {\n        messages.push({ topic: 'freezestat', payload: data.freezestat });\n    }\n\n    if (data.mixedAir !== undefined) {\n        messages.push({ topic: 'mixedAir', payload: data.mixedAir });\n    }\n\n    if (data.connected !== undefined) {\n        messages.push({ topic: 'connected', payload: data.connected });\n    }\n\n    return [messages];\n}\n\nreturn parseSystemControl(msg);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1840,
+        "y": 1640,
+        "wires": [
+            [
+                "76cd92535a066002"
+            ]
+        ]
+    },
+    {
+        "id": "76cd92535a066002",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 8",
+        "func": "// First handle direct topic-based messages\nlet updatedValue;\nif (msg.topic === \"setpoint\") {\n    updatedValue = msg.payload;\n    global.set(\"thermostatData.setpoint\", updatedValue);\n} else if (msg.topic === \"mode\") {\n    updatedValue = msg.payload;\n    global.set(\"thermostatData.mode\", updatedValue);\n} \n\n// Retrieve current thermostat data\nconst thermostatData = {\n    setpoint: updatedValue || msg.payload.setpoint || global.get(\"thermostatData.setpoint\") || 72,\n    mode: msg.payload.mode || global.get(\"thermostatData.mode\") || 'off',\n    indoorTemp: msg.payload.supply || global.get(\"thermostatData.indoorTemp\") || 72,\n    outdoorTemp: msg.payload.outdoorAir || global.get(\"thermostatData.outdoorTemp\") || 68,\n    humidity: msg.payload.humidity || global.get(\"thermostatData.humidity\") || 40,\n    oaActuator: msg.payload.oaActuator || global.get(\"thermostatData.oaActuator\"),\n    vfd: msg.payload.vfd || global.get(\"thermostatData.vfd\"),\n    hwActuator: msg.payload.hwActuator || global.get(\"thermostatData.hwActuator\"),\n    cwActuator: msg.payload.cwActuator || global.get(\"thermostatData.cwActuator\"),\n    pumpPressure: msg.payload.pumpPressure || global.get(\"thermostatData.pumpPressure\"),\n    buildingPressure: msg.payload.buildingPressure || global.get(\"thermostatData.buildingPressure\")\n};\n\n// Save updated thermostat data to global context\nglobal.set(\"thermostatData\", thermostatData);\n\n// Pass the data along for any additional nodes that follow\nmsg.payload = thermostatData;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2020,
+        "y": 1640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a5749a4e8a86c354",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "OAMOD",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 3240,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "b2eaf3b64480d6f3",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 28",
+        "func": "// Assuming msg.payload contains the temperature in Celsius\nvar celsius = parseFloat(msg.payload);\n\n// Convert Celsius to Fahrenheit\nvar fahrenheit = (celsius * 9 / 5) + 32;\n\n// Round to 2 decimal places\nfahrenheit = Math.round(fahrenheit * 100) / 100;\n\n// Update msg.payload with the temperature in Fahrenheit\nmsg.payload = fahrenheit;\n\n// Return the updated message\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 1260,
+        "wires": [
+            [
+                "5a49526254ec633c",
+                "dbb3ef239ee18047"
+            ]
+        ]
+    },
+    {
+        "id": "2b049296622ee5bd",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 55",
+        "func": "// Set min and max temperature range\nconst minTemp = 55;\nconst maxTemp = 68;\n\n// Generate random temperature between min and max\n// Math.random() gives number between 0-1, multiply by range and add minimum\nlet mixedAirTemp = Math.random() * (maxTemp - minTemp) + minTemp;\n\n// Round to 2 decimal places\nmixedAirTemp = Math.round(mixedAirTemp * 100) / 100;\n\n// Set the payload\nmsg.payload = mixedAirTemp;\n\n// Add status indicator showing current temperature\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `Mixed Air: ${mixedAirTemp}°F`\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1320,
+        "wires": [
+            [
+                "0133733ed35f18bc"
+            ]
+        ]
+    },
+    {
+        "id": "1e69812b8a8d0c8e",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 2810,
+        "y": 1140,
+        "wires": [
+            [
+                "58b2d8dad1375c74"
+            ]
+        ]
+    },
+    {
+        "id": "6ce73db0b3ca136a",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "1.2",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 2806.54443359375,
+        "y": 1173.094970703125,
+        "wires": [
+            [
+                "58b2d8dad1375c74"
+            ]
+        ]
+    },
+    {
+        "id": "5a692383f208c435",
+        "type": "inject",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "setpoint",
+        "payload": "75",
+        "payloadType": "num",
+        "x": 1770,
+        "y": 1420,
+        "wires": [
+            [
+                "1fe36d82e172d28a"
+            ]
+        ]
+    },
+    {
+        "id": "dbb3ef239ee18047",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 56",
+        "func": "// Initialize context variable to store last valid value if not exists\ncontext.lastValidPayload = context.lastValidPayload || 0;\n\n// Check if payload is a number\nif (typeof msg.payload === 'number') {\n    // Check if payload is within valid range\n    if (msg.payload > 150 || msg.payload < -10) {\n        // Out of range - use last valid value\n        msg.payload = context.lastValidPayload;\n        node.status({\n            fill: \"red\",\n            shape: \"ring\",\n            text: `Blocked: ${msg.payload}`\n        });\n    } else {\n        // Valid range - update last valid value\n        context.lastValidPayload = msg.payload;\n        node.status({\n            fill: \"green\",\n            shape: \"dot\",\n            text: `Valid: ${msg.payload}`\n        });\n    }\n} else {\n    // Not a number - use last valid value\n    msg.payload = context.lastValidPayload;\n    node.status({\n        fill: \"yellow\",\n        shape: \"ring\",\n        text: `Not a number: using ${msg.payload}`\n    });\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1260,
+        "wires": [
+            [
+                "44c124c6025b11ad"
+            ]
+        ]
+    },
+    {
+        "id": "d094bf6a63a211ba",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 57",
+        "func": "// Function to check topic and allow only setpoint messages\nif (msg.topic === \"setpoint\") {\n    // Save the setpoint value to global context\n    let thermostatData = global.get(\"thermostatData\") || {};\n    thermostatData.setpoint = msg.payload;\n    global.set(\"thermostatData\", thermostatData);\n\n    // Allow message to pass through if topic is \"setpoint\"\n    node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: `Setpoint Passed: ${msg.payload}`\n    });\n    return msg;\n} else {\n    // Block all other topics\n    node.status({\n        fill: \"red\",\n        shape: \"ring\",\n        text: `Blocked Topic: ${msg.topic}`\n    });\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2010,
+        "y": 1340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68ecb1d55dbe851b",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 130",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 3710,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "b35024db621b226f",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 4",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2220,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "f7c37dad07fb1a78",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "debug 129",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2170,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "6022781ea557ce35",
+        "type": "delay",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2040,
+        "y": 1240,
+        "wires": [
+            [
+                "228baa905ad3a67d"
+            ]
+        ]
+    },
+    {
+        "id": "2e43d627051f0911",
+        "type": "delay",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "hour",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2310,
+        "y": 1520,
+        "wires": [
+            [
+                "1b081255a238d9e8"
+            ]
+        ]
+    },
+    {
+        "id": "b0a24b85d431be8b",
+        "type": "function",
+        "z": "03439e94ed033c2f",
+        "name": "function 58",
+        "func": "function getSetpoint(msg) {\n    if (msg.payload && typeof msg.payload === 'object') {\n        return { payload: msg.payload.setpoint };\n    }\n    return { payload: null };\n}\nreturn getSetpoint(msg);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2030,
+        "y": 1520,
+        "wires": [
+            [
+                "28da2cea8c8d5e6e",
+                "58d42abd91a3038c"
+            ]
+        ]
+    },
+    {
+        "id": "58d42abd91a3038c",
+        "type": "change",
+        "z": "03439e94ed033c2f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "setpoint",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1950,
+        "y": 1420,
+        "wires": [
+            [
+                "1fe36d82e172d28a"
+            ]
+        ]
+    },
+    {
+        "id": "8c43597f7f4537a4",
+        "type": "link in",
+        "z": "03439e94ed033c2f",
+        "name": "link in 1",
+        "links": [
+            "7e1b3f290664d755"
+        ],
+        "x": 2675,
+        "y": 1020,
+        "wires": [
+            [
+                "58ff7f571ac91d64"
+            ]
+        ]
+    },
+    {
+        "id": "30307bd4febc054b",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "OAMOD",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 2840,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "3a0180deb3a317f0",
+        "type": "debug",
+        "z": "03439e94ed033c2f",
+        "name": "HeatingMod",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 3579.25927734375,
+        "y": 1440.370361328125,
+        "wires": []
+    },
+    {
+        "id": "d416c8e74d906acf",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "automatacontrols.3utilities.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "c78453392eca2fcb",
+        "type": "ui_group",
+        "name": "",
+        "tab": "f1a5eaeb3bc50cd3",
+        "order": 1,
+        "disp": true,
+        "width": 30,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e80c2d3ab6e767c8",
+        "type": "ui_group",
+        "name": "HOA",
+        "tab": "f5b269641db92df7",
+        "order": null,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "adaf646bb1af200d",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "automatacontrolsdevops.3utilities.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "3",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "f1a5eaeb3bc50cd3",
+        "type": "ui_tab",
+        "name": "Automata Controls Thermostat",
+        "icon": "fa-thermometer-half",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "f5b269641db92df7",
+        "type": "ui_tab",
+        "name": "Automata Controls HOA",
+        "icon": "fa-solid fa-bolt",
+        "order": 5,
+        "disabled": false,
+        "hidden": false
+    }
+]

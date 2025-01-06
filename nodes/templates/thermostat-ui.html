@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Automata Thermostat</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .thermostat-container {
+            width: 100%;
+            min-width: 300px;
+            max-width: 600px;
+            padding: 20px;
+            background: #15171B;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+            font-family: sans-serif;
+            font-size: 14px;
+            border-radius: 15px;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow:
+                /* Primary outer shadow */
+                0 0 15px rgba(0, 0, 0, 0.6),
+                /* Metallic edge highlights */
+                0 0 0 3px rgba(180, 180, 180, 0.5),
+                /* Inner bevel highlights */
+                inset 0 4px 6px rgba(255, 255, 255, 0.3),
+                /* Inner bevel shadows */
+                inset 0 -4px 6px rgba(0, 0, 0, 0.4),
+                /* Additional metallic depth */
+                0 0 3px rgba(200, 200, 200, 0.2),
+                /* Subtle outer glow */
+                0 0 20px rgba(0, 0, 0, 0.4);
+            background-image:
+                /* Brushed metal texture - horizontal lines */
+                repeating-linear-gradient(90deg,
+                    rgba(180, 180, 180, 0.05) 0px,
+                    rgba(180, 180, 180, 0.05) 1px,
+                    rgba(120, 120, 120, 0.05) 1px,
+                    rgba(120, 120, 120, 0.05) 2px),
+                /* Primary metallic gradient */
+                linear-gradient(145deg,
+                    rgba(160, 160, 160, 0.15) 0%,
+                    rgba(80, 80, 80, 0.15) 50%,
+                    rgba(40, 40, 40, 0.15) 100%);
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .header-row1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 8px;
+        }
+
+        .brand-time {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .brand {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: rgb(0, 168, 168);
+        }
+
+        .time {
+            font-size: 0.8em;
+            margin-top: 2px;
+        }
+
+        .setpoint-humidity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.9em;
+        }
+
+        #setpointDisplay,
+        #humidity {
+            color: rgb(0, 168, 168);
+        }
+
+        .status-icon {
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+            width: 24px;
+            height: 24px;
+        }
+
+        .status-icon .fan-blades,
+        .status-icon .snowflake {
+            fill: currentColor;
+            opacity: 0.8;
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+
+        .wifi-signal {
+            fill: rgb(0, 168, 168);
+            transform-origin: center;
+        }
+
+        .status-label[data-active="true"]~.status-icon .fan-blades {
+            animation: spin 2s linear infinite;
+        }
+
+        .status-label[data-active="true"]~.status-icon .snowflake {
+            animation: spin 3s linear infinite;
+        }
+
+        .status-label[data-active="true"]~.status-icon .wifi-signal {
+            animation: gradient-flow 2s linear infinite;
+            background: linear-gradient(to top,
+                    rgb(0, 168, 168) 0%,
+                    rgba(0, 168, 168, 0.8) 25%,
+                    rgba(0, 168, 168, 0.4) 50%,
+                    rgba(0, 168, 168, 0.2) 75%,
+                    transparent 100%);
+        }
+
+        @keyframes gradient-flow {
+            0% {
+                stop-color: rgb(0, 168, 168);
+                stop-opacity: 1;
+            }
+
+            50% {
+                stop-color: rgba(0, 168, 168, 0.5);
+                stop-opacity: 0.5;
+            }
+
+            100% {
+                stop-color: rgb(0, 168, 168);
+                stop-opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .header-row2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 30px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-label {
+            background: #444;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .status-label[data-active="true"] {
+            background: #2ecc71;
+            color: #000;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
+        }
+
+        .main-display {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .temp-control {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .setpoint-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #tempDisplay {
+            color: rgb(0, 168, 168);
+        }
+
+        .setpoint-ring.heating {
+            border-color: #ff5733;
+            box-shadow: 0 0 15px rgba(255, 87, 51, 0.7);
+        }
+
+        .setpoint-ring.cooling {
+            border-color: #00a8a8;
+            box-shadow: 0 0 15px rgba(0, 168, 168, 0.7);
+        }
+
+        .adjust-chevron {
+            position: absolute;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+        }
+
+        .adjust-chevron.up {
+            right: -70px;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        .adjust-chevron.down {
+            left: -70px;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        .adjust-chevron svg {
+            fill: #ffa726;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mode-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+            transform: translateX(32px);
+        }
+
+        .mode-button {
+            width: 70px;
+            height: 70px;
+            padding: 5px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #aaa;
+            border-radius: 8px;
+            background: #444;
+            box-shadow:
+                inset 0 0 3px rgba(255, 255, 255, 0.3),
+                inset 0 0 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .mode-button span {
+            margin-top: 4px;
+            font-size: 0.9em;
+        }
+
+        .mode-icon {
+            font-size: 70px;
+        }
+
+        .mode-button.heat span,
+        .mode-button.heat .mode-icon {
+            color: #ff6f00;
+        }
+
+        .mode-button.fan span,
+        .mode-button.fan .mode-icon {
+            color: #4faedc;
+        }
+
+        .mode-button.cool span,
+        .mode-button.cool .mode-icon {
+            color: #00a8a8;
+        }
+
+        .mode-button.off span,
+        .mode-button.off .mode-icon {
+            color: rgb(240, 5, 107);
+        }
+
+        .mode-button.active {
+            box-shadow:
+                0 0 10px rgba(0, 229, 229, 0.8),
+                inset 0 0 3px rgba(255, 255, 255, 0.4),
+                inset 0 0 2px rgba(0, 0, 0, 0.4);
+            border-color: #00e5e5;
+            transform: translateY(-1px);
+        }
+
+        .mode-button.active.heat {
+            border-color: #ff5733;
+            box-shadow:
+                0 0 15px rgba(255, 87, 51, 0.7),
+                inset 0 0 3px rgba(255, 255, 255, 0.4),
+                inset 0 0 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .mode-button.active.cool {
+            border-color: #00a8a8;
+            box-shadow:
+                0 0 15px rgba(0, 168, 168, 0.7),
+                inset 0 0 3px rgba(255, 255, 255, 0.4),
+                inset 0 0 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .mode-button:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                inset 0 0 3px rgba(255, 255, 255, 0.3),
+                inset 0 0 2px rgba(0, 0, 0, 0.4),
+                0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 15px;
+            background: #2a2f36;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .infoRow {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+            color: #fff;
+        }
+
+        .infoRowName {
+            font-weight: bold;
+            color: #ffa726;
+        }
+
+        .infoRowValue {
+            color: rgb(0, 168, 168);
+        }
+
+        #indoorTemp,
+        #outdoorTemp,
+        #oaActuator,
+        #cwActuator,
+        #hwActuator,
+        #vfd,
+        #pumpPressure,
+        #buildingPressure {
+            color: rgb(0, 168, 168);
+        }
+
+        .control-modes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #2a2f36;
+            border-radius: 8px;
+        }
+
+        .control-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(0, 168, 168, 0.3);
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-label {
+            font-size: 0.9em;
+            color: #ffa726;
+            font-weight: bold;
+        }
+
+        .control-value {
+            color: rgb(0, 168, 168);
+            font-weight: bold;
+        }
+
+        .control-button[data-active="true"] {
+            border-color: rgb(0, 168, 168);
+            background: rgba(0, 168, 168, 0.1);
+            box-shadow:
+                0 0 15px rgba(0, 168, 168, 0.4),
+                inset 0 0 8px rgba(0, 168, 168, 0.2);
+        }
+
+        .control-button[data-active="true"] .control-value {
+            color: rgb(0, 168, 168);
+            text-shadow: 0 0 10px rgba(0, 168, 168, 0.8);
+        }
+
+        .theme-toggle {
+            margin-top: 15px;
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            background: #2a2f36;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .theme-toggle:hover {
+            background: #444;
+        }
+
+       
+        /* Add new LED styles */
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .led-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #00ff00;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.3;
+                box-shadow: 0 0 2px #00ff00;
+            }
+
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 10px #00ff00;
+            }
+
+            100% {
+                opacity: 0.3;
+                box-shadow: 0 0 2px #00ff00;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="thermostat-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-row1">
+                <div class="brand-time">
+                    <div class="brand-container">
+                        <div class="brand">Automata</div>
+                        <div class="led-indicator"></div>
+                    </div>
+                    <div class="time">8:30 AM</div>
+                </div>
+                <div class="setpoint-humidity">
+                    <div class="status-item">
+                        <svg class="status-icon" viewBox="0 0 24 24">
+                            <path d="M8 2v20H3V7l5-5zM8 22h13V8h-5V2l-8 6zM16 8v14M11 14h4M11 10h4" />
+                        </svg>
+                        <span id="setpointDisplay">72</span>°
+                    </div>
+                    <div class="status-item">
+                        <svg class="status-icon" viewBox="0 0 24 24">
+                            <path d="M12 2S7 9 7 13c0 2.8 2.2 5 5 5s5-2.2 5-5c0-4-5-11-5-11z" />
+                        </svg>
+                        <span id="humidity">48</span>%
+                    </div>
+                </div>
+            </div>
+            <div class="header-row2">
+                <div class="status-indicator">
+                    <span class="status-label" id="mqttStatus" data-active="false">MQTT</span>
+                    <svg class="status-icon" viewBox="0 0 24 24">
+                        <path class="wifi-signal"
+                            d="M12 3C7.95 3 4.21 4.34 1.2 6.6L3 9C5.5 7.12 8.62 6 12 6C15.38 6 18.5 7.12 21 9L22.8 6.6C19.79 4.34 16.05 3 12 3M12 9C9.3 9 6.81 9.89 4.8 11.4L6.6 13.8C8.1 12.67 9.97 12 12 12C14.03 12 15.9 12.67 17.4 13.8L19.2 11.4C17.19 9.89 14.7 9 12 9M12 15C10.65 15 9.4 15.45 8.4 16.2L12 21L15.6 16.2C14.6 15.45 13.35 15 12 15" />
+                    </svg>
+                </div>
+                <div class="status-indicator">
+                    <svg class="status-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2c2 0 3.5 1.5 3.5 3.5 0 1.6-1.2 3-3 3.4V10h-1V8.9c-1.8-.4-3-1.8-3-3.4C8.5 3.5 10 2 12 2Z" />
+                        <path d="M10 12c-1.7 0-3 1.3-3 3v3h10v-3c0-1.7-1.3-3-3-3h-4Z" />
+                    </svg>
+                    <span class="status-label" id="occupiedStatus" data-active="false">Occupied</span>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-label" id="fanStatus" data-active="false">Running</span>
+                    <svg class="status-icon" viewBox="0 0 24 24">
+                        <g class="fan-blades">
+                            <path
+                                d="M12 2C8 2 7 6 7 6C7 6 10 6 12 7C14 8 14 10 14 10C14 10 11 9 9 9C7 9 4 10 4 10C4 10 5 7 6 5C7 3 9 2 12 2Z" />
+                            <path
+                                d="M22 12C22 8 18 7 18 7C18 7 18 10 17 12C16 14 14 14 14 14C14 14 15 11 15 9C15 7 14 4 14 4C14 4 17 5 19 6C21 7 22 12 22 12Z" />
+                            <path
+                                d="M12 22C16 22 17 18 17 18C17 18 14 18 12 17C10 16 10 14 10 14C10 14 13 15 15 15C17 15 20 14 20 14C20 14 19 17 18 19C17 21 15 22 12 22Z" />
+                            <path
+                                d="M2 12C2 16 6 17 6 17C6 17 6 14 7 12C8 10 10 10 10 10C10 10 9 13 9 15C9 17 10 20 10 20C10 20 7 19 5 18C3 17 2 12 2 12Z" />
+                        </g>
+                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-label" id="freezeStatus" data-active="false">Normal</span>
+                    <svg class="status-icon" viewBox="0 0 24 24">
+                        <g class="snowflake">
+                            <path d="M12 2 L12 22 M2 12 L22 12" />
+                            <path d="M4.93 4.93 L19.07 19.07 M19.07 4.93 L4.93 19.07" />
+                            <path d="M12 2 L10 5 L14 5 L12 2 M12 22 L10 19 L14 19 L12 22" />
+                            <path d="M2 12 L5 10 L5 14 L2 12 M22 12 L19 10 L19 14 L22 12" />
+                            <path d="M4.93 4.93 L6 7.5 L8 5.5 L4.93 4.93 M19.07 19.07 L17 16.5 L15 18.5 L19.07 19.07" />
+                            <path d="M19.07 4.93 L16.5 6 L18.5 8 L19.07 4.93 M4.93 19.07 L7.5 17 L5.5 15 L4.93 19.07" />
+                        </g>
+                        <circle cx="12" cy="12" r="1" fill="currentColor" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Display -->
+        <div class="main-display">
+            <div class="temp-control">
+                <div class="setpoint-ring" id="setpointRing">
+                    <span id="tempDisplay">72°F</span>
+                </div>
+                <button class="adjust-chevron up" onclick="thermostat.adjustTemperature(1)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 8l6 6H6z" />
+                    </svg>
+                </button>
+                <button class="adjust-chevron down" onclick="thermostat.adjustTemperature(-1)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 16l-6-6h12z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mode Controls -->
+        <div class="mode-controls">
+            <div class="mode-button heat" id="heatingMode" onclick="thermostat.setMode('heating')">
+                <span class="material-icons mode-icon">whatshot</span>
+                <span>Heat</span>
+            </div>
+            <div class="mode-button fan" id="fanMode" onclick="thermostat.setMode('fan')">
+                <span class="material-icons mode-icon">air</span>
+                <span>Fan</span>
+            </div>
+            <div class="mode-button cool" id="coolingMode" onclick="thermostat.setMode('cooling')">
+                <span class="material-icons mode-icon">ac_unit</span>
+                <span>Cool</span>
+            </div>
+            <div class="mode-button off" id="offMode" onclick="thermostat.setMode('off')">
+                <span class="material-icons mode-icon">power_settings_new</span>
+                <span>Off</span>
+            </div>
+        </div>
+
+        <!-- Info Container -->
+        <div class="info-container">
+            <div class="infoRow">
+                <span class="infoRowName">Indoor Temp</span>
+                <span class="infoRowValue" id="indoorTemp">72°F</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">Mixed Air</span>
+                <span class="infoRowValue" id="mixedAir">68°F</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">Outdoor Temp</span>
+                <span class="infoRowValue" id="outdoorTemp">68°F</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">OA Actuator</span>
+                <span class="infoRowValue"><span id="oaActuator">0</span>%</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">CW Actuator</span>
+                <span class="infoRowValue"><span id="cwActuator">0</span>%</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">HW Actuator</span>
+                <span class="infoRowValue"><span id="hwActuator">0</span>%</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">VFD</span>
+                <span class="infoRowValue"><span id="vfd">0</span>Hz</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">Pump Pressure</span>
+                <span class="infoRowValue"><span id="pumpPressure">0</span>Psi</span>
+            </div>
+            <div class="infoRow">
+                <span class="infoRowName">Building Pressure</span>
+                <span class="infoRowValue"><span id="buildingPressure">0</span>inWC</span>
+            </div>
+        </div>
+
+        <!-- Control Mode Buttons -->
+        <div class="control-modes">
+            <div class="control-button" data-type="fan" data-active="false"
+                onclick="thermostat.toggleControlMode('fan')">
+                <span class="control-label">Fan Control</span>
+                <span class="control-value" id="fanControlMode">VFD</span>
+            </div>
+            <div class="control-button" data-type="oa" data-active="false" onclick="thermostat.toggleControlMode('oa')">
+                <span class="control-label">OA Actuator</span>
+                <span class="control-value" id="oaControlMode">MOD</span>
+            </div>
+            <div class="control-button" data-type="heat" data-active="false"
+                onclick="thermostat.toggleControlMode('heat')">
+                <span class="control-label">Heat Control</span>
+                <span class="control-value" id="heatControlMode">MOD</span>
+            </div>
+            <div class="control-button" data-type="cool" data-active="false"
+                onclick="thermostat.toggleControlMode('cool')">
+                <span class="control-label">Cool Control</span>
+                <span class="control-value" id="coolControlMode">MOD</span>
+            </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="theme-toggle" onclick="thermostat.toggleTheme()">Toggle Dark/Light Mode</div>
+    </div>
+    <script>
+        (function (scope) {  // Changed to pass scope
+            let thermoState = {
+                currentTemp: 72,
+                setpoint: 72,
+                mode: "off",
+                theme: "dark",
+                humidity: 48,
+                occupied: false,
+                freezeStatus: true,
+                fanStatus: false,
+                mqttStatus: false,
+                showingSetpoint: false,
+                indoorTemp: 72,
+                outdoorTemp: 68,
+                mixedAir: 72,    // Added mixedAir
+                oaActuator: 0,
+                cwActuator: 0,
+                hwActuator: 0,
+                pumpPressure: 0,
+                buildingPressure: 0,
+                vfd: 0,
+                time: "8:30 AM",
+                fanControl: "vfd",
+                oaControl: "mod",
+                heatControl: "mod",
+                coolControl: "mod"
+            };
+
+            function saveState() {
+                localStorage.setItem("thermostatState", JSON.stringify(thermoState));
+            }
+
+            function updateDisplay() {
+                const dialVal = thermoState.showingSetpoint ? thermoState.setpoint : thermoState.currentTemp;
+                document.getElementById("tempDisplay").textContent = dialVal + "°F";
+                document.getElementById("setpointDisplay").textContent = thermoState.setpoint;
+                document.querySelector(".time").textContent = thermoState.time;
+
+                document.getElementById("humidity").textContent = thermoState.humidity;
+                document.getElementById("indoorTemp").textContent = thermoState.indoorTemp + "°F";
+                document.getElementById("outdoorTemp").textContent = thermoState.outdoorTemp + "°F";
+
+                document.getElementById("occupiedStatus").dataset.active = thermoState.occupied;
+                document.getElementById("freezeStatus").dataset.active = thermoState.freezeStatus;
+                document.getElementById("fanStatus").dataset.active = thermoState.fanStatus;
+                document.getElementById("mqttStatus").dataset.active = thermoState.mqttStatus;
+
+                const ringEl = document.getElementById("setpointRing");
+                ringEl.classList.remove("heating", "cooling");
+                if (thermoState.mode === "heating") {
+                    ringEl.classList.add("heating");
+                } else if (thermoState.mode === "cooling") {
+                    ringEl.classList.add("cooling");
+                }
+
+                document.querySelectorAll(".mode-button").forEach((btn) => {
+                    btn.classList.remove("active", "heat", "cool");
+                });
+                const activeBtn = document.getElementById(thermoState.mode + "Mode");
+                if (activeBtn) {
+                    activeBtn.classList.add("active");
+                    if (thermoState.mode === "heating") {
+                        activeBtn.classList.add("heat");
+                    } else if (thermoState.mode === "cooling") {
+                        activeBtn.classList.add("cool");
+                    }
+                }
+
+                document.getElementById("oaActuator").textContent = thermoState.oaActuator;
+                document.getElementById("cwActuator").textContent = thermoState.cwActuator;
+                document.getElementById("hwActuator").textContent = thermoState.hwActuator;
+                document.getElementById("vfd").textContent = thermoState.vfd;
+                document.getElementById("pumpPressure").textContent = thermoState.pumpPressure;
+                document.getElementById("buildingPressure").textContent = thermoState.buildingPressure;
+                document.getElementById("mixedAir").textContent = thermoState.mixedAir + "°F";
+
+                // Update control mode displays
+                document.getElementById("fanControlMode").textContent = thermoState.fanControl.toUpperCase();
+                document.getElementById("oaControlMode").textContent = thermoState.oaControl.toUpperCase();
+                document.getElementById("heatControlMode").textContent = thermoState.heatControl.toUpperCase();
+                document.getElementById("coolControlMode").textContent = thermoState.coolControl.toUpperCase();
+
+                // Update control button active states
+                document.querySelector(`.control-button[data-type="fan"]`).dataset.active = (thermoState.fanControl === "triac");
+                document.querySelector(`.control-button[data-type="oa"]`).dataset.active = (thermoState.oaControl === "triac");
+                document.querySelector(`.control-button[data-type="heat"]`).dataset.active = (thermoState.heatControl === "triac");
+                document.querySelector(`.control-button[data-type="cool"]`).dataset.active = (thermoState.coolControl === "dx");
+
+                applyTheme(thermoState.theme);
+            }
+
+            function applyTheme(theme) {
+                const container = document.querySelector(".thermostat-container");
+                const infoContainer = document.querySelector(".info-container");
+                const themeToggle = document.querySelector(".theme-toggle");
+
+                if (theme === "light") {
+                    container.style.background = "#ffffff";
+                    container.style.color = "#000000";
+                    infoContainer.style.background = "#f0f0f0";
+                    themeToggle.style.background = "#f0f0f0";
+                } else {
+                    container.style.background = "#15171B";
+                    container.style.color = "#ffffff";
+                    infoContainer.style.background = "#2a2f36";
+                    themeToggle.style.background = "#2a2f36";
+                }
+            }
+
+            window.thermostat = {
+                adjustTemperature(amount) {
+                    const oldSetpoint = thermoState.setpoint;
+                    thermoState.setpoint = Math.max(50, Math.min(90, thermoState.setpoint + amount));
+                    thermoState.showingSetpoint = true;
+
+                    console.log(`Setpoint adjusted: ${oldSetpoint} -> ${thermoState.setpoint}`);
+
+                    document.getElementById("setpointDisplay").textContent = thermoState.setpoint;
+                    document.getElementById("tempDisplay").textContent = thermoState.setpoint + "°F";
+
+                    if (thermoState.setpointTimeout) {
+                        clearTimeout(thermoState.setpointTimeout);
+                    }
+
+                    thermoState.setpointTimeout = setTimeout(() => {
+                        thermoState.showingSetpoint = false;
+                        document.getElementById("tempDisplay").textContent = thermoState.currentTemp + "°F";
+                        updateDisplay();
+                    }, 3000);
+
+                    saveState();
+                    scope.send({
+                        topic: "setpoint",
+                        payload: thermoState.setpoint
+                    });
+                    console.log("Setpoint message sent:", thermoState.setpoint);
+                },
+
+                setMode(mode) {
+                    thermoState.mode = mode;
+                    updateDisplay();
+                    saveState();
+                    scope.send({ payload: { mode: mode } });
+                },
+
+                toggleTheme() {
+                    thermoState.theme = thermoState.theme === "dark" ? "light" : "dark";
+                    updateDisplay();
+                    saveState();
+                },
+
+                toggleControlMode(type) {
+                    let payload;
+                    let topic;
+
+                    switch (type) {
+                        case 'fan':
+                            payload = thermoState.fanControl === 'vfd' ? 'triac' : 'vfd';
+                            thermoState.fanControl = payload;
+                            topic = 'controlMode_Fan';
+                            break;
+                        case 'oa':
+                            payload = thermoState.oaControl === 'mod' ? 'triac' : 'mod';
+                            thermoState.oaControl = payload;
+                            topic = 'controlMode_OA_Actuator';
+                            break;
+                        case 'heat':
+                            payload = thermoState.heatControl === 'mod' ? 'triac' : 'mod';
+                            thermoState.heatControl = payload;
+                            topic = 'controlMode_Heating';
+                            break;
+                        case 'cool':
+                            payload = thermoState.coolControl === 'mod' ? 'dx' : 'mod';
+                            thermoState.coolControl = payload;
+                            topic = 'controlMode_Cooling';
+                            break;
+                    }
+
+                    scope.send({
+                        topic: topic,
+                        payload: payload
+                    });
+
+                    updateDisplay();
+                    saveState();
+                }
+            };
+
+            if (scope) {
+                scope.$watch("msg", function (msg) {
+                    if (msg && msg.payload) {
+                        let stateChanged = false;
+
+                        if (msg.payload.mixedAir !== undefined) {
+                            thermoState.mixedAir = parseFloat(msg.payload.mixedAir);
+                            stateChanged = true;
+                        }
+
+                        if (msg.payload.setpoint !== undefined) {
+                            thermoState.setpoint = msg.payload.setpoint;
+                            stateChanged = true;
+                        }
+
+                        if (msg.payload.supply !== undefined) {
+                            thermoState.indoorTemp = msg.payload.supply;
+                            thermoState.currentTemp = msg.payload.supply;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.outdoorAir !== undefined) {
+                            thermoState.outdoorTemp = msg.payload.outdoorAir;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.humidity !== undefined) {
+                            thermoState.humidity = msg.payload.humidity;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.oaActuator !== undefined) {
+                            thermoState.oaActuator = msg.payload.oaActuator;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.hwActuator !== undefined) {
+                            thermoState.hwActuator = msg.payload.hwActuator;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.cwActuator !== undefined) {
+                            thermoState.cwActuator = msg.payload.cwActuator;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.vfd !== undefined) {
+                            thermoState.vfd = msg.payload.vfd;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.pumpPressure !== undefined) {
+                            thermoState.pumpPressure = msg.payload.pumpPressure;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.buildingPressure !== undefined) {
+                            thermoState.buildingPressure = msg.payload.buildingPressure;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.fanStatus !== undefined) {
+                            thermoState.fanStatus = msg.payload.fanStatus;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.freezestat !== undefined) {
+                            thermoState.freezeStatus = msg.payload.freezestat;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.occupied !== undefined) {
+                            thermoState.occupied = msg.payload.occupied;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.connected !== undefined) {
+                            thermoState.mqttStatus = msg.payload.connected;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.mode !== undefined) {
+                            thermoState.mode = msg.payload.mode;
+                            stateChanged = true;
+                        }
+                        if (msg.payload.time !== undefined) {
+                            thermoState.time = msg.payload.time;
+                            stateChanged = true;
+                        }
+
+                        if (stateChanged) {
+                            console.log("Updating state with:", msg.payload);
+                            updateDisplay();
+                            saveState();
+                        }
+                    }
+                });
+            }
+
+            // Send control mode messages to Node-RED when buttons are clicked
+            document.querySelectorAll('.control-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const type = this.dataset.type;
+                    let msg = {
+                        topic: "",
+                        payload: ""
+                    };
+
+                    switch (type) {
+                        case 'fan':
+                            msg.topic = "controlMode_Fan";
+                            msg.payload = thermoState.fanControl === 'vfd' ? 'triac' : 'vfd';
+                            break;
+                        case 'oa':
+                            msg.topic = "controlMode_OA_Actuator";
+                            msg.payload = thermoState.oaControl === 'mod' ? 'triac' : 'mod';
+                            break;
+                        case 'heat':
+                            msg.topic = "controlMode_Heating";
+                            msg.payload = thermoState.heatControl === 'mod' ? 'triac' : 'mod';
+                            break;
+                        case 'cool':
+                            msg.topic = "controlMode_Cooling";
+                            msg.payload = thermoState.coolControl === 'mod' ? 'triac' : 'mod';
+                            break;
+                    }
+
+                    scope.send(msg);
+                });
+            });
+
+            updateDisplay();
+        })(scope);
+    </script>
+</body>
+
+</html>
