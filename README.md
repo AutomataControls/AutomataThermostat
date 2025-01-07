@@ -1,6 +1,20 @@
+Here's the complete updated README.md:
+
+```markdown
 # Automata Thermostat for Node-RED
 
-Professional-grade HVAC control interface for Node-RED Dashboard 2.0, featuring comprehensive building automation capabilities.
+Professional-grade HVAC control interface for Node-RED Dashboard 2.0, delivering sophisticated building automation through an elegantly designed UI. This advanced thermostat seamlessly integrates with Automata Controls' state-of-the-art modulating and switching control logic, enabling dynamic transitions between VFD/TRIAC fan control, modulating/TRIAC outdoor air management, modulating/TRIAC heating control, and modulating/DX cooling modes. Built for industrial-grade reliability and precision, this interface combines intuitive operation with comprehensive system monitoring capabilities, making it the ideal solution for modern building management systems requiring both sophisticated control and user-friendly operation.
+
+![License](https://img.shields.io/badge/license-GPL--3.0-blue)
+![npm](https://img.shields.io/npm/v/@automatacontrols/automata-thermostat)
+![Downloads](https://img.shields.io/npm/dt/@automatacontrols/automata-thermostat)
+[![GitHub Stars](https://img.shields.io/github/stars/AutomataControls/AutomataThermostat)](https://github.com/AutomataControls/AutomataThermostat/stargazers)
+[![GitHub Watchers](https://img.shields.io/github/watchers/AutomataControls/AutomataThermostat)](https://github.com/AutomataControls/AutomataThermostat/watchers)
+![Node-RED](https://img.shields.io/badge/Node--RED-Dashboard_2.0-red)
+![HVAC](https://img.shields.io/badge/HVAC-Control-brightgreen)
+![BMS](https://img.shields.io/badge/Building-Automation-orange)
+
+Tags: `node-red` `dashboard` `thermostat` `hvac` `building-automation` `controls` `ui` `widget` `automata` `temperature-control` `building-management` `automation` `monitoring` `gpl-3.0`
 
 ![Automata Thermostat Screenshot](https://raw.githubusercontent.com/AutomataControls/AutomataThermostat/main/nodes/icons/thermostat.png)
 
@@ -110,3 +124,38 @@ AutomataControls
 - Real-time monitoring
 - Advanced control modes
 - Building automation features
+
+### 1.0.3
+- Fixed dependency for node-red-dashboard to version 2.0.0
+- Added example flow for reference
+
+### 1.0.4
+- Added Node-RED library screenshot
+- Fixed template path loading
+
+### 1.0.5
+- Updated node color to brand pink (#F0056B)
+- Improved documentation
+
+### 1.0.6
+- Added comprehensive example flow
+- Enhanced error handling
+
+### 1.0.7
+- Fixed template directory structure
+- Improved MQTT integration
+
+### 1.0.8
+- Updated node icon
+- Enhanced UI responsiveness
+
+### 1.0.9
+- Added status badges
+- Updated documentation with examples
+
+### 1.0.10
+- Complete directory restructure
+- Added keyword tags
+- Updated license badges
+```
+
